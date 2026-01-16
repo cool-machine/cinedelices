@@ -99,20 +99,24 @@ mkdir -p docker
 
 #### Jour 2 : Installation des Dépendances
 
+> **Note** : Ces packages correspondent au programme O'clock
+
 | # | Tâche | Commande | Justification |
 |---|-------|----------|---------------|
 | 1.9 | Installer Express | `npm i express` | Framework HTTP |
 | 1.10 | Installer EJS | `npm i ejs` | Moteur de templates |
 | 1.11 | Installer Sequelize + pg | `npm i sequelize pg pg-hstore` | ORM + driver PostgreSQL |
-| 1.12 | Installer bcrypt | `npm i bcrypt` | Hachage mots de passe |
-| 1.13 | Installer express-session | `npm i express-session` | Gestion des sessions |
-| 1.14 | Installer helmet | `npm i helmet` | Headers de sécurité |
-| 1.15 | Installer cors | `npm i cors` | Cross-Origin Requests |
-| 1.16 | Installer dotenv | `npm i dotenv` | Variables d'environnement |
-| 1.17 | Installer multer | `npm i multer` | Upload de fichiers (images) |
-| 1.18 | Installer express-validator | `npm i express-validator` | Validation des entrées |
+| 1.12 | Installer argon2 | `npm i argon2` | Hachage mots de passe (plus sécurisé que bcrypt) |
+| 1.13 | Installer bcrypt (backup) | `npm i bcrypt` | Alternative si argon2 pose problème |
+| 1.14 | Installer express-session | `npm i express-session` | Gestion des sessions |
+| 1.15 | Installer dotenv | `npm i dotenv` | Variables d'environnement |
+| 1.16 | Installer express-validator | `npm i express-validator` | Validation des entrées |
+| 1.17 | Installer joi | `npm i joi` | Validation de schémas (alternative) |
+| 1.18 | Installer cors | `npm i cors` | Cross-Origin Requests |
 | 1.19 | Installer dépendances dev | `npm i -D nodemon eslint jest` | Dev tools |
 | 1.20 | Commit dépendances | `git commit -m "chore(deps): add core dependencies"` | |
+
+**Note sur les images** : Pour le MVP, les recettes utiliseront des **URLs d'images** (texte) au lieu d'uploads. Cela évite d'utiliser multer et simplifie le projet.
 
 #### Jour 3 : Configuration Docker & Base de Données
 
