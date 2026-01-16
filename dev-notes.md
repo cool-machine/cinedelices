@@ -250,7 +250,7 @@ mkdir -p docker
 | 2.33 | Créer GET /recipes/new | `recipeController.showCreateForm()` | Formulaire création (auth required) |
 | 2.34 | Créer le formulaire | `views/pages/recipe-form.ejs` | Tous les champs recette |
 | 2.35 | Charger catégories/médias | Controller | Dropdown dynamiques |
-| 2.36 | Gérer upload image | Multer config | Stockage local ou cloud |
+| 2.36 | Ajouter champ URL image | `recipe-form.ejs` | Champ texte pour URL (pas d'upload fichier) |
 | 2.37 | Valider les entrées | express-validator | Règles de validation |
 | 2.38 | Implémenter POST /recipes | `recipeController.create()` | Création en BDD |
 | 2.39 | Ajouter messages de succès/erreur | Flash messages | Feedback utilisateur |
@@ -309,32 +309,39 @@ mkdir -p docker
 
 #### Semaine 3 - Jour 3 : Sécurité & Performance
 
+> **Explications des concepts de sécurité :**
+> - **CSRF (Cross-Site Request Forgery)** : Attaque où un site malveillant envoie des requêtes au nom d'un utilisateur connecté. Protection : vérifier l'origine des requêtes.
+> - **XSS (Cross-Site Scripting)** : Injection de scripts malveillants. Protection : échapper les données utilisateur (EJS le fait automatiquement avec `<%= %>`).
+> - **Rate limiting** : Limiter le nombre de requêtes pour éviter les attaques par force brute.
+
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
 | 3.9 | Audit sécurité dépendances | `npm audit` | Corriger vulnérabilités |
-| 3.10 | Implémenter rate limiting | `express-rate-limit` | 100 requests/15min |
-| 3.11 | Vérifier tokens CSRF | Middleware csurf | Protection formulaires |
-| 3.12 | Vérifier échappement XSS | EJS, sanitize-html | Entrées utilisateur safe |
-| 3.13 | Vérifier injection SQL | Sequelize parameterized | Requêtes sécurisées |
-| 3.14 | Configurer helmet complet | `server.js` | CSP, HSTS, etc. |
-| 3.15 | Optimiser images | Compression, lazy loading | Performance |
-| 3.16 | Minifier CSS/JS (prod) | Build scripts | Bundle optimisé |
-| 3.17 | Commit sécurité | `git commit -m "security: add rate limiting and security hardening"` | |
+| 3.10 | Vérifier échappement XSS | EJS avec `<%= %>` | EJS échappe automatiquement le HTML |
+| 3.11 | Vérifier injection SQL | Sequelize | Sequelize utilise des requêtes paramétrées |
+| 3.12 | Sécuriser les cookies | `express-session` config | `httpOnly: true`, `secure: true` en prod |
+| 3.13 | Valider toutes les entrées | `express-validator` / `joi` | Aucune donnée non validée |
+| 3.14 | Tester scénarios de sécurité | Manual testing | Tentatives d'injection, accès non autorisé |
+| 3.15 | Commit sécurité | `git commit -m "security: add input validation and secure cookies"` | |
 
-#### Semaine 3 - Jour 4 : SEO & Accessibilité
+#### Semaine 3 - Jour 4 : SEO & Accessibilité (Simplifié)
+
+> **SEO Essentiel** : Les éléments ci-dessous sont les plus importants pour le référencement. Les items avancés (sitemap, robots.txt, Schema.org) sont optionnels pour le MVP.
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 3.18 | Ajouter balises meta | Toutes les pages | Title, description uniques |
-| 3.19 | Ajouter Open Graph | `<meta property="og:*">` | Partage réseaux sociaux |
-| 3.20 | Créer sitemap.xml | `public/sitemap.xml` | Index pour Google |
-| 3.21 | Créer robots.txt | `public/robots.txt` | Directives crawlers |
-| 3.22 | Ajouter Schema.org | JSON-LD | Données structurées recettes |
-| 3.23 | Audit accessibilité | Lighthouse, aXe | Score > 90 |
-| 3.24 | Corriger problèmes a11y | Contraste, alt, labels | Conformité WCAG |
-| 3.25 | Ajouter skip links | Navigation clavier | Accessibilité |
-| 3.26 | Tester navigation clavier | Manual testing | Tab navigation complète |
-| 3.27 | Commit SEO/A11y | `git commit -m "feat(seo): add meta tags, sitemap, and a11y fixes"` | |
+| 3.16 | Ajouter balise `<title>` | Toutes les pages EJS | Titre unique par page (ex: "Ratatouille - Ciné Délices") |
+| 3.17 | Ajouter meta description | `<meta name="description">` | Description courte (max 160 caractères) |
+| 3.18 | Utiliser structure HTML sémantique | `<header>`, `<main>`, `<footer>`, `<article>` | Améliore le SEO et l'accessibilité |
+| 3.19 | Ajouter attributs alt aux images | Toutes les `<img>` | Description textuelle des images |
+| 3.20 | Tester avec Lighthouse | Chrome DevTools → Lighthouse | Score SEO et accessibilité |
+| 3.21 | Corriger problèmes identifiés | Selon rapport Lighthouse | Améliorer les scores |
+| 3.22 | Commit SEO | `git commit -m "feat(seo): add meta tags and semantic HTML"` | |
+
+**Optionnel (bonus)** :
+- `robots.txt` : Fichier indiquant aux moteurs de recherche quelles pages indexer
+- `sitemap.xml` : Liste de toutes les pages pour Google
+- Open Graph : Balises pour un bel affichage lors du partage sur les réseaux sociaux
 
 #### Semaine 3 - Jour 5 : RGPD & Mentions Légales
 
