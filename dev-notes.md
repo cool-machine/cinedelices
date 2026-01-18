@@ -259,6 +259,88 @@ mkdir -p docker
 | 2.42 | Commit ajout recette | `git commit -m "feat(recipes): add recipe creation form"` | |
 | 2.43 | Merge vers develop | PR review + merge | Code review |
 
+---
+
+#### 🤖 BONUS : Génération de Recette Assistée par IA (Optionnel)
+
+> **⚠️ Feature Bonus** : Cette fonctionnalité est **entièrement optionnelle**. Ne l'implémenter que si :
+> - Le MVP est fonctionnel
+> - L'équipe a du temps disponible
+> - Vous voulez un élément différenciant pour le portfolio
+>
+> **Objectif** : Accélérer la création de recettes en proposant un pré-remplissage automatique basé sur le film/série sélectionné, tout en laissant le contrôle éditorial total à l'utilisateur.
+
+**Placement** : Intégré au formulaire de création de recette existant
+
+| # | Tâche | Fichier | Description |
+|---|-------|---------|-------------|
+| 2.44b | Créer variable d'environnement | `.env` | `GEMINI_API_KEY`, `AI_ENABLED=true` |
+| 2.45b | Ajouter bouton "Suggérer avec l'IA" | `recipe-form.ejs` | Bouton affiché uniquement si média sélectionné |
+| 2.46b | Créer service IA | `src/services/aiRecipeService.js` | Appel API Gemini pour génération |
+| 2.47b | Créer endpoint génération | `recipeController.generateFromMedia()` | Route POST `/api/recipes/generate` |
+| 2.48b | Implémenter prompt template | `aiRecipeService.js` | Template structuré film → JSON recette |
+| 2.49b | Ajouter gestion front-end | `public/js/recipe-form.js` | Fetch API, loading state, pré-remplissage |
+| 2.50b | Gestion des erreurs | Frontend + Backend | Timeout, rate limit, fallback manuel |
+| 2.51b | Tester scénario complet | Manual testing | Sélection → Génération → Édition → Soumission |
+| 2.52b | Commit feature IA | Git | `feat(ai): add AI-assisted recipe generation` |
+
+**Choix Technique :**
+
+| Décision | Choix | Justification |
+|----------|-------|---------------|
+| **LLM Provider** | Google Gemini 1.5 Flash | Tier gratuit généreux (15 req/min) |
+| **Fallback** | Désactivation gracieuse | Si quota dépassé ou API down, formulaire manuel |
+| **Format réponse** | JSON structuré | `{title, ingredients[], steps[], anecdote}` |
+| **Cache** | Non (MVP) | Peut être ajouté plus tard si besoin |
+
+**Variables d'environnement à ajouter :**
+```env
+# AI Recipe Generation (Optional Feature)
+GEMINI_API_KEY=your-google-ai-api-key
+AI_ENABLED=true
+AI_MAX_RETRIES=2
+AI_TIMEOUT_MS=10000
+```
+
+**Exemple de prompt template :**
+```javascript
+// src/services/aiRecipeService.js
+const generateRecipePrompt = (media) => `
+Tu es un chef créatif spécialisé dans les recettes inspirées du cinéma.
+
+Film/Série : "${media.title}" (${media.release_year})
+Type : ${media.type}
+
+Génère une recette de cuisine INSPIRÉE par ce film/série.
+La recette doit évoquer l'univers, les personnages, ou une scène emblématique.
+
+Réponds UNIQUEMENT en JSON (pas de markdown) :
+{
+  "title": "Nom créatif de la recette",
+  "ingredients": ["ingrédient 1", "ingrédient 2", ...],
+  "instructions": ["étape 1", "étape 2", ...],
+  "anecdote": "Lien entre la recette et le film/série",
+  "difficulty": "facile|moyen|difficile",
+  "prep_time": 30,
+  "cook_time": 45
+}
+`;
+```
+
+**Garde-fous :**
+- ✅ L'IA **ne crée jamais directement** en base de données
+- ✅ L'utilisateur peut éditer tous les champs générés
+- ✅ Bouton désactivé si pas de média sélectionné
+- ✅ Feature flag : peut être désactivée via `AI_ENABLED=false`
+- ✅ Aucun impact sur le schéma de BDD
+
+**Installation de la dépendance :**
+```bash
+npm install @google/generative-ai
+```
+
+---
+
 **Critères de validation Sprint 2 :**
 - [ ] Inscription/connexion/déconnexion fonctionnels
 - [ ] Catalogue avec recherche et filtres opérationnel
