@@ -179,3 +179,99 @@ export const handleRegister = async (req, res) => {
         });
     }
 };
+
+// Recipe CRUD
+export const getNewRecipePage = async (req, res) => {
+    try {
+        const categories = await Category.findAll();
+        const mediaList = await Media.findAll();
+
+        res.render('recipes/new', {
+            title: 'Créer une Recette - CinéDélices',
+            categories,
+            mediaList
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const createRecipe = async (req, res) => {
+    try {
+        const { title, description, ingredients, instructions, category_id, media_id, difficulty, prep_time, cook_time, image_url } = req.body;
+
+        await Recipe.create({
+            title,
+            description,
+            ingredients,
+            instructions,
+            category_id: category_id || null,
+            media_id: media_id || null,
+            difficulty: difficulty || 'moyen',
+            prep_time: prep_time || 0,
+            cook_time: cook_time || 0,
+            image_url,
+            user_id: req.user.id
+        });
+
+        res.redirect('/recipes');
+    } catch (error) {
+        const categories = await Category.findAll();
+        const mediaList = await Media.findAll();
+        res.render('recipes/new', {
+            title: 'Créer une Recette - CinéDélices',
+            categories,
+            mediaList,
+            error: 'Erreur lors de la création'
+        });
+    }
+};
+
+export const getEditRecipePage = async (req, res) => {
+    try {
+        const recipe = req.recipe; // Set by isRecipeAuthor middleware
+        const categories = await Category.findAll();
+        const mediaList = await Media.findAll();
+
+        res.render('recipes/edit', {
+            title: `Modifier ${recipe.title} - CinéDélices`,
+            recipe,
+            categories,
+            mediaList
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const updateRecipe = async (req, res) => {
+    try {
+        const { title, description, ingredients, instructions, category_id, media_id, difficulty, prep_time, cook_time, image_url } = req.body;
+
+        await req.recipe.update({
+            title,
+            description,
+            ingredients,
+            instructions,
+            category_id: category_id || null,
+            media_id: media_id || null,
+            difficulty: difficulty || 'moyen',
+            prep_time: prep_time || 0,
+            cook_time: cook_time || 0,
+            image_url
+        });
+
+        res.redirect(`/recipes/${req.recipe.id}`);
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const deleteRecipe = async (req, res) => {
+    try {
+        await req.recipe.destroy();
+        res.redirect('/recipes');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};

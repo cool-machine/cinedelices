@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import methodOverride from 'method-override';
 import router from './routes/index.js';
 import viewRoutes from './routes/viewRoutes.js';
 
@@ -29,6 +31,8 @@ app.set("layout extractScripts", true);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing - API
