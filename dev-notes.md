@@ -342,10 +342,10 @@ npm install @google/generative-ai
 ---
 
 **Critères de validation Sprint 2 :**
-- [ ] Inscription/connexion/déconnexion fonctionnels
-- [ ] Catalogue avec recherche et filtres opérationnel
-- [ ] Page détail recette complète
-- [ ] Formulaire d'ajout de recette fonctionnel (utilisateurs connectés)
+- [x] Inscription/connexion/déconnexion fonctionnels
+- [x] Catalogue avec recherche et filtres opérationnel
+- [x] Page détail recette complète
+- [x] Formulaire d'ajout de recette fonctionnel (utilisateurs connectés)
 - [ ] Tests manuels de tous les scénarios MVP passés
 
 ---

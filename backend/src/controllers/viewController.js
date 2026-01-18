@@ -177,7 +177,7 @@ export const handleLogin = async (req, res) => {
         }
 
         res.redirect('/');
-    } catch (error) {
+    } catch {
         res.render('auth/login', {
             title: 'Connexion - CinéDélices',
             error: 'Une erreur est survenue'
@@ -204,7 +204,7 @@ export const handleRegister = async (req, res) => {
 
         // Redirect to login
         res.redirect('/login');
-    } catch (error) {
+    } catch {
         res.render('auth/register', {
             title: 'Inscription - CinéDélices',
             error: 'Une erreur est survenue'
@@ -252,7 +252,7 @@ export const createRecipe = async (req, res) => {
         });
 
         res.redirect('/recipes');
-    } catch (error) {
+    } catch {
         const categories = await Category.findAll();
         const mediaList = await Media.findAll();
         res.render('recipes/new', {
@@ -368,7 +368,7 @@ export const updateProfile = async (req, res) => {
         });
 
         res.redirect(`/profile/${user.id}`);
-    } catch (error) {
+    } catch {
         const user = await User.findByPk(req.user.id);
         res.render('profile/edit', {
             title: 'Modifier mon profil - CinéDélices',

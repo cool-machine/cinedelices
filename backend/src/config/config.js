@@ -4,7 +4,7 @@ export default {
     development: {
         url: process.env.DATABASE_URL,
         dialect: 'postgres',
-        logging: console.log,
+        logging: false,
         define: {
             underscored: true,
             timestamps: true,

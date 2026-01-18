@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Layout Configuration
 app.use(expressLayouts);
 app.set('layout', 'layouts/main'); // Default layout
-app.set("layout extractScripts", true);
+app.set('layout extractScripts', true);
 
 // Middlewares
 app.use(cors());
@@ -45,7 +45,7 @@ app.use((req, res, next) => {
             req.user = decoded;
             res.locals.user = decoded;
         }
-    } catch (error) {
+    } catch {
         // Token invalid or expired - continue without user
     }
     next();
@@ -63,7 +63,7 @@ app.get('/health', (req, res) => {
 });
 
 // 404 Handler (Last route)
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).render('404', { title: 'Page Non Trouvée' });
 });
 

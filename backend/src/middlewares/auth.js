@@ -40,7 +40,7 @@ export const isAuthenticated = (req, res, next) => {
         const decoded = verifyToken(token);
         req.user = decoded;
         next();
-    } catch (error) {
+    } catch {
         if (isApiRequest(req)) {
             return res.status(401).json({ message: 'Invalid or expired token' });
         }
@@ -84,7 +84,7 @@ export const isRecipeAuthor = async (req, res, next) => {
 
         req.recipe = recipe;
         next();
-    } catch (error) {
+    } catch {
         return res.status(500).json({ message: 'Server error' });
     }
 };
