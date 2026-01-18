@@ -19,7 +19,7 @@ describe('General API Routes', () => {
         it('should return welcome message', async () => {
             const res = await request(app).get('/');
             expect(res.statusCode).toEqual(200);
-            expect(res.text).toContain('Welcome to CinéDélices');
+            expect(res.text).toContain('Bienvenue sur CinéDélices');
         });
     });
 
