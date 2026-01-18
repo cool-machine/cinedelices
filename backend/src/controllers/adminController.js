@@ -117,3 +117,86 @@ export const deleteAdminRecipe = async (req, res) => {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
     }
 };
+
+export const getAdminCategoriesPage = async (req, res) => {
+    try {
+        const categories = await Category.findAll({
+            order: [['created_at', 'DESC']]
+        });
+
+        res.render('admin/categories/index', {
+            title: 'Admin - Catégories',
+            layout: 'layouts/admin',
+            categories
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const createAdminCategory = async (req, res) => {
+    try {
+        const { name, description } = req.body;
+
+        await Category.create({
+            name,
+            description: description || null
+        });
+
+        res.redirect('/admin/categories');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const getAdminEditCategoryPage = async (req, res) => {
+    try {
+        const category = await Category.findByPk(req.params.id);
+
+        if (!category) {
+            return res.status(404).render('404', { title: 'Catégorie introuvable' });
+        }
+
+        res.render('admin/categories/edit', {
+            title: `Admin - Modifier ${category.name}`,
+            layout: 'layouts/admin',
+            category
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const updateAdminCategory = async (req, res) => {
+    try {
+        const category = await Category.findByPk(req.params.id);
+
+        if (!category) {
+            return res.status(404).render('404', { title: 'Catégorie introuvable' });
+        }
+
+        await category.update({
+            name: req.body.name ?? category.name,
+            description: req.body.description ?? category.description
+        });
+
+        res.redirect('/admin/categories');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const deleteAdminCategory = async (req, res) => {
+    try {
+        const category = await Category.findByPk(req.params.id);
+
+        if (!category) {
+            return res.status(404).render('404', { title: 'Catégorie introuvable' });
+        }
+
+        await category.destroy();
+        res.redirect('/admin/categories');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};

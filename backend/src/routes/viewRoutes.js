@@ -32,6 +32,11 @@ router.get('/admin/recipes', isAuthenticated, isAdmin, adminController.getAdminR
 router.get('/admin/recipes/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditRecipePage);
 router.put('/admin/recipes/:id', isAuthenticated, isAdmin, adminController.updateAdminRecipe);
 router.delete('/admin/recipes/:id', isAuthenticated, isAdmin, adminController.deleteAdminRecipe);
+router.get('/admin/categories', isAuthenticated, isAdmin, adminController.getAdminCategoriesPage);
+router.post('/admin/categories', isAuthenticated, isAdmin, adminController.createAdminCategory);
+router.get('/admin/categories/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditCategoryPage);
+router.put('/admin/categories/:id', isAuthenticated, isAdmin, adminController.updateAdminCategory);
+router.delete('/admin/categories/:id', isAuthenticated, isAdmin, adminController.deleteAdminCategory);
 
 // Rating & Review routes
 router.post('/recipes/:id/rate', isAuthenticated, viewController.rateRecipe);

@@ -1,0 +1,20 @@
+<div class="admin-category-edit">
+    <h1>Modifier la catégorie</h1>
+
+    <form action="/admin/categories/<%= category.id %>?_method=PUT" method="POST" class="category-form">
+        <div class="form-group">
+            <label for="name">Nom *</label>
+            <input type="text" id="name" name="name" required value="<%= category.name %>">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3"><%= category.description || '' %></textarea>
+        </div>
+
+        <div class="form-actions">
+            <a href="/admin/categories" class="btn btn-secondary">Retour</a>
+            <button type="submit" class="btn btn-gold">💾 Enregistrer</button>
+        </div>
+    </form>
+</div>
