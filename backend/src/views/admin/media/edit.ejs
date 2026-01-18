@@ -1,0 +1,33 @@
+<div class="admin-media-edit">
+    <h1>Modifier le média</h1>
+
+    <form action="/admin/media/<%= media.id %>?_method=PUT" method="POST" class="media-form">
+        <div class="form-group">
+            <label for="title">Titre *</label>
+            <input type="text" id="title" name="title" required value="<%= media.title %>">
+        </div>
+
+        <div class="form-group">
+            <label for="type">Type *</label>
+            <select id="type" name="type" required>
+                <option value="film" <%= media.type === 'film' ? 'selected' : '' %>>Film</option>
+                <option value="serie" <%= media.type === 'serie' ? 'selected' : '' %>>Série</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="release_year">Année</label>
+            <input type="number" id="release_year" name="release_year" min="1900" max="2100" value="<%= media.release_year || '' %>">
+        </div>
+
+        <div class="form-group">
+            <label for="image_url">Image URL</label>
+            <input type="url" id="image_url" name="image_url" value="<%= media.image_url || '' %>">
+        </div>
+
+        <div class="form-actions">
+            <a href="/admin/media" class="btn btn-secondary">Retour</a>
+            <button type="submit" class="btn btn-gold">💾 Enregistrer</button>
+        </div>
+    </form>
+</div>

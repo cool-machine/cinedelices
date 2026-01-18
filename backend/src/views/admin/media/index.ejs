@@ -1,0 +1,54 @@
+<div class="admin-media">
+    <h1>Gestion des Médias</h1>
+
+    <form action="/admin/media" method="POST" class="media-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="title">Titre *</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="type">Type *</label>
+                <select id="type" name="type" required>
+                    <option value="film">Film</option>
+                    <option value="serie">Série</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="release_year">Année</label>
+                <input type="number" id="release_year" name="release_year" min="1900" max="2100">
+            </div>
+            <div class="form-group">
+                <label for="image_url">Image URL</label>
+                <input type="url" id="image_url" name="image_url">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-gold">Ajouter</button>
+            </div>
+        </div>
+    </form>
+
+    <% if (mediaList.length === 0) { %>
+        <p>Aucun média disponible.</p>
+    <% } else { %>
+        <div class="media-table">
+            <% mediaList.forEach(media => { %>
+                <div class="media-row">
+                    <div class="media-info">
+                        <strong><%= media.title %></strong>
+                        <span><%= media.type %></span>
+                        <% if (media.release_year) { %>
+                            <span><%= media.release_year %></span>
+                        <% } %>
+                    </div>
+                    <div class="media-actions">
+                        <a href="/admin/media/<%= media.id %>/edit" class="btn btn-secondary">Modifier</a>
+                        <form action="/admin/media/<%= media.id %>?_method=DELETE" method="POST" class="inline-form">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>

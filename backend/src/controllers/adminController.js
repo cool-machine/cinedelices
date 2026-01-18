@@ -271,3 +271,90 @@ export const deleteAdminUser = async (req, res) => {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
     }
 };
+
+export const getAdminMediaPage = async (req, res) => {
+    try {
+        const mediaList = await Media.findAll({
+            order: [['created_at', 'DESC']]
+        });
+
+        res.render('admin/media/index', {
+            title: 'Admin - Médias',
+            layout: 'layouts/admin',
+            mediaList
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const createAdminMedia = async (req, res) => {
+    try {
+        const { title, type, image_url, release_year } = req.body;
+
+        await Media.create({
+            title,
+            type,
+            image_url: image_url || null,
+            release_year: release_year || null
+        });
+
+        res.redirect('/admin/media');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const getAdminEditMediaPage = async (req, res) => {
+    try {
+        const media = await Media.findByPk(req.params.id);
+
+        if (!media) {
+            return res.status(404).render('404', { title: 'Média introuvable' });
+        }
+
+        res.render('admin/media/edit', {
+            title: `Admin - Modifier ${media.title}`,
+            layout: 'layouts/admin',
+            media
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const updateAdminMedia = async (req, res) => {
+    try {
+        const media = await Media.findByPk(req.params.id);
+
+        if (!media) {
+            return res.status(404).render('404', { title: 'Média introuvable' });
+        }
+
+        await media.update({
+            title: req.body.title ?? media.title,
+            type: req.body.type ?? media.type,
+            image_url: req.body.image_url ?? media.image_url,
+            release_year: req.body.release_year ?? media.release_year
+        });
+
+        res.redirect('/admin/media');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const deleteAdminMedia = async (req, res) => {
+    try {
+        const media = await Media.findByPk(req.params.id);
+
+        if (!media) {
+            return res.status(404).render('404', { title: 'Média introuvable' });
+        }
+
+        await media.destroy();
+        res.redirect('/admin/media');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};

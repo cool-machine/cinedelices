@@ -41,6 +41,11 @@ router.get('/admin/users', isAuthenticated, isAdmin, adminController.getAdminUse
 router.get('/admin/users/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditUserPage);
 router.put('/admin/users/:id', isAuthenticated, isAdmin, adminController.updateAdminUser);
 router.delete('/admin/users/:id', isAuthenticated, isAdmin, adminController.deleteAdminUser);
+router.get('/admin/media', isAuthenticated, isAdmin, adminController.getAdminMediaPage);
+router.post('/admin/media', isAuthenticated, isAdmin, adminController.createAdminMedia);
+router.get('/admin/media/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditMediaPage);
+router.put('/admin/media/:id', isAuthenticated, isAdmin, adminController.updateAdminMedia);
+router.delete('/admin/media/:id', isAuthenticated, isAdmin, adminController.deleteAdminMedia);
 
 // Rating & Review routes
 router.post('/recipes/:id/rate', isAuthenticated, viewController.rateRecipe);
