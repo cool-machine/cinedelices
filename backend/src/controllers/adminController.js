@@ -200,3 +200,74 @@ export const deleteAdminCategory = async (req, res) => {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
     }
 };
+
+export const getAdminUsersPage = async (req, res) => {
+    try {
+        const users = await User.findAll({
+            order: [['created_at', 'DESC']]
+        });
+
+        res.render('admin/users/index', {
+            title: 'Admin - Utilisateurs',
+            layout: 'layouts/admin',
+            users
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const getAdminEditUserPage = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).render('404', { title: 'Utilisateur introuvable' });
+        }
+
+        res.render('admin/users/edit', {
+            title: `Admin - Modifier ${user.username}`,
+            layout: 'layouts/admin',
+            user
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const updateAdminUser = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).render('404', { title: 'Utilisateur introuvable' });
+        }
+
+        await user.update({
+            username: req.body.username ?? user.username,
+            email: req.body.email ?? user.email,
+            role: req.body.role ?? user.role,
+            bio: req.body.bio ?? user.bio,
+            avatar_url: req.body.avatar_url ?? user.avatar_url
+        });
+
+        res.redirect('/admin/users');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const deleteAdminUser = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id);
+
+        if (!user) {
+            return res.status(404).render('404', { title: 'Utilisateur introuvable' });
+        }
+
+        await user.destroy();
+        res.redirect('/admin/users');
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};

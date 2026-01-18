@@ -1,0 +1,25 @@
+<div class="admin-users">
+    <h1>Gestion des Utilisateurs</h1>
+
+    <% if (users.length === 0) { %>
+        <p>Aucun utilisateur disponible.</p>
+    <% } else { %>
+        <div class="users-table">
+            <% users.forEach(userItem => { %>
+                <div class="user-row">
+                    <div class="user-info">
+                        <strong><%= userItem.username %></strong>
+                        <span><%= userItem.email %></span>
+                        <span>Rôle: <%= userItem.role %></span>
+                    </div>
+                    <div class="user-actions">
+                        <a href="/admin/users/<%= userItem.id %>/edit" class="btn btn-secondary">Modifier</a>
+                        <form action="/admin/users/<%= userItem.id %>?_method=DELETE" method="POST" class="inline-form">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>

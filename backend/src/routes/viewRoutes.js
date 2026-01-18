@@ -37,6 +37,10 @@ router.post('/admin/categories', isAuthenticated, isAdmin, adminController.creat
 router.get('/admin/categories/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditCategoryPage);
 router.put('/admin/categories/:id', isAuthenticated, isAdmin, adminController.updateAdminCategory);
 router.delete('/admin/categories/:id', isAuthenticated, isAdmin, adminController.deleteAdminCategory);
+router.get('/admin/users', isAuthenticated, isAdmin, adminController.getAdminUsersPage);
+router.get('/admin/users/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditUserPage);
+router.put('/admin/users/:id', isAuthenticated, isAdmin, adminController.updateAdminUser);
+router.delete('/admin/users/:id', isAuthenticated, isAdmin, adminController.deleteAdminUser);
 
 // Rating & Review routes
 router.post('/recipes/:id/rate', isAuthenticated, viewController.rateRecipe);
