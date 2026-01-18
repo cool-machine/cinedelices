@@ -27,11 +27,12 @@
 │   ├── /src
 │   │   ├── /controllers      # Route handlers
 │   │   ├── /middlewares      # Auth, validation
-│   │   ├── /models           # Sequelize models
+│   │   ├── /models           # Sequelize models (User, Recipe, Category, Media, Rating, Review)
 │   │   ├── /routes           # API + View routes
 │   │   ├── /views            # EJS templates
 │   │   │   ├── /auth         # Login, Register
-│   │   │   ├── /recipes      # CRUD forms
+│   │   │   ├── /recipes      # CRUD forms + detail with ratings/reviews
+│   │   │   ├── /profile      # User profile views
 │   │   │   └── /layouts      # Main layout
 │   │   └── /public           # Static assets (CSS)
 │   ├── /tests
@@ -40,7 +41,7 @@
 │   ├── server.js
 │   └── package.json
 │
-├── /frontend                 # Svelte + Vite (for interactive components)
+├── /frontend                 # Svelte + Vite (for interactive components - not yet used)
 │   ├── /src
 │   └── package.json
 │
@@ -53,62 +54,58 @@
 
 | Model | Key Fields |
 |-------|-----------|
-| **User** | id, email, password_hash, username, role |
-| **Recipe** | id, title, description, ingredients, instructions, difficulty, prep_time, cook_time, image_url, user_id (FK), category_id (FK), media_id (FK) |
+| **User** | id, email, password_hash, username, role, avatar_url, bio |
+| **Recipe** | id, title, description, ingredients, instructions, difficulty, prep_time, cook_time, image_url, user_id, category_id, media_id |
 | **Category** | id, name, description |
 | **Media** | id, title, type (film/serie), image_url, release_year |
+| **Rating** | id, user_id, recipe_id, stars (1-5), unique(user_id, recipe_id) |
+| **Review** | id, user_id, recipe_id, content |
 
 ---
 
 ## ✅ Completed Work
 
 ### Sprint 0: Conception ✅
-- Wireframes, mockups, color palette (#D4AF37 gold, #8B0000 red, #1A1A1A dark)
-- Database design (MCD/MLD)
+- Wireframes, mockups, color palette
 
 ### Sprint 1: MVP Setup ✅ (Tagged: `v1.0-sprint1`)
 - Express + EJS configuration
 - Sequelize models with associations
 - API routes (Auth, Recipes, Categories, Media)
 - Frontend views (Homepage, Recipe list/detail, Login/Register)
-- Cinematic UI (film strips, projector graphic, glassmorphic cards)
+- Cinematic UI (film strips, projector, glassmorphic cards)
 - Search & Filter functionality
-- 81 tests passing
 
 ### Sprint 2 Progress:
 #### Phase 0: Project Restructure ✅
 - Split into `/backend` and `/frontend` directories
-- Svelte + Vite initialized in `/frontend`
 
 #### Phase 1: Recipe CRUD Forms ✅
-- `GET /recipes/new` - Create recipe form
-- `POST /recipes` - Submit new recipe
-- `GET /recipes/:id/edit` - Edit recipe form
-- `PUT /recipes/:id` - Update recipe
-- `DELETE /recipes/:id` - Delete recipe
-- Auth-protected routes with `isRecipeAuthor` middleware
-- **87 tests passing**
+- Create/Edit/Delete recipe forms with auth protection
+
+#### Phase 2: User Profiles ✅
+- Added avatar_url, bio to User model
+- Profile page (`/profile/:id`) with "My Recipes"
+- Profile edit form (`/profile/edit`)
+
+#### Phase 3: Ratings & Reviews ✅
+- Rating model (1-5 stars, unique per user/recipe)
+- Review model with text content
+- `POST /recipes/:id/rate` and `POST /recipes/:id/reviews`
+- Recipe detail page shows average rating and reviews list
+
+**Current Test Count: 97 tests passing**
 
 ---
 
 ## 📋 Remaining Work (Sprint 2)
 
-### Phase 2: User Profiles
-- [ ] Add avatar_url, bio to User model
-- [ ] Create `/profile/:id` view page
-- [ ] Create `/profile/edit` form
-- [ ] Add "My Recipes" section
-
-### Phase 3: Ratings & Reviews
-- [ ] Create Rating model (user_id, recipe_id, stars 1-5)
-- [ ] Create Review model (user_id, recipe_id, content)
-- [ ] Display average rating on recipe cards
-- [ ] Add review form on recipe detail page
-
-### Phase 4: Favorites
+### Phase 4: Favorites (NEXT)
 - [ ] Create Favorite model (user_id, recipe_id, unique together)
-- [ ] Add favorite toggle button on recipes
-- [ ] Create `/favorites` page
+- [ ] Create migration for favorites table
+- [ ] Add `POST /recipes/:id/favorite` toggle route
+- [ ] Add favorite button on recipe cards and detail page
+- [ ] Create `/favorites` page showing user's favorites
 
 ---
 
@@ -118,32 +115,29 @@
 |------|---------|
 | `backend/src/app.js` | Express setup, middlewares, route registration |
 | `backend/src/routes/viewRoutes.js` | All frontend routes (views) |
-| `backend/src/routes/index.js` | API routes under `/api/v1` |
 | `backend/src/controllers/viewController.js` | Renders EJS pages + handles form submissions |
 | `backend/src/middlewares/auth.js` | `isAuthenticated`, `isRecipeAuthor` middlewares |
-| `backend/src/models/index.js` | Sequelize setup + model associations |
-| `backend/src/public/css/style.css` | All styling (740+ lines of cinematic CSS) |
+| `backend/src/models/index.js` | Sequelize setup + model associations (auto-loads all models) |
+| `backend/src/public/css/style.css` | All styling (830+ lines of cinematic CSS) |
 
 ---
 
 ## 🧪 Running the Project
 
 ```bash
-# Backend (from /backend directory)
-npm install
-npm run dev          # Starts on http://localhost:3000
+# Start PostgreSQL
+docker-compose up -d
 
-# Frontend (from /frontend directory)
+# Backend (from /backend directory)
+cp ../.env .env     # Copy env file if needed
 npm install
-npm run dev          # Starts on http://localhost:5173
+npm run dev         # Starts on http://localhost:3000
 
 # Run tests (from /backend)
 npm test
 
-# Database
-docker-compose up -d         # Start PostgreSQL
-npm run db:migrate           # Run migrations
-npm run db:seed              # Seed demo data
+# Run migrations (from /backend)
+npx sequelize-cli db:migrate --env development
 ```
 
 ---
@@ -152,16 +146,9 @@ npm run db:seed              # Seed demo data
 
 - **TDD**: Write failing tests first (Red), implement to pass (Green), refactor
 - **Auth Pattern**: Cookie-based JWT for views, Bearer token for API
+- **Migrations**: Use `.cjs` extension for Sequelize CLI compatibility with ES modules
+- **View Routes**: Root-level (`/`, `/recipes`, `/profile`, etc.)
 - **API Routes**: `/api/v1/*` prefix
-- **View Routes**: Root-level (`/`, `/recipes`, `/login`, etc.)
-
----
-
-## 📝 Git Workflow
-
-- **Main branch**: `develop`
-- **Tags**: `v1.0-sprint1` marks end of Sprint 1
-- **Commit style**: Conventional commits (`feat:`, `fix:`, `refactor:`)
 
 ---
 
@@ -170,22 +157,54 @@ npm run db:seed              # Seed demo data
 | Metric | Value |
 |--------|-------|
 | **Sprint** | 2 (in progress) |
-| **Phase** | 1 complete, 2 next |
-| **Tests** | 87 passing |
-| **Progress** | ~60% of Sprint 2 |
+| **Phase** | 3 complete, 4 next |
+| **Tests** | 97 passing |
+| **Progress** | ~80% of Sprint 2 |
 
-**Last commit**: `feat(sprint2-phase1): implement Recipe CRUD forms`
+**Last commit**: `feat(sprint2-phase3): implement Ratings and Reviews system`
 
 ---
 
 ## 🚀 To Continue Development
 
 1. Read this document
-2. Review `backend/src/` for current implementation
-3. Check `backend/tests/integration/` for test patterns
-4. Start Phase 2: User Profiles (see remaining work above)
-5. Follow TDD: Write tests first, then implement
+2. Start Phase 4: Favorites
+3. Follow TDD pattern used in existing tests
+4. See `backend/tests/integration/ratingsReviews.test.js` for test patterns
 
-**Questions to answer:**
-- Should avatar upload use URLs or file upload?
-- Should profiles be public or private by default?
+---
+
+## 📝 Prompt for Next LLM
+
+Copy this prompt to continue development:
+
+```
+I'm working on CinéDélices, a recipe website for dishes from movies/TV shows.
+
+**Current State:**
+- Sprint 2, Phase 4: Favorites (last remaining phase)
+- 97 tests passing
+- Backend: Express + EJS + Sequelize + PostgreSQL
+- All models: User, Recipe, Category, Media, Rating, Review
+
+**Phase 4 Tasks:**
+1. Create Favorite model (user_id + recipe_id, unique together)
+2. Create migration (.cjs file) for favorites table
+3. Add toggle favorite route: POST /recipes/:id/favorite
+4. Update recipe cards/detail to show favorite button
+5. Create /favorites page listing user's favorites
+6. Write integration tests (TDD approach)
+
+**Key Files:**
+- backend/src/models/ (see Rating.js as reference)
+- backend/src/routes/viewRoutes.js
+- backend/src/controllers/viewController.js
+- backend/tests/integration/ (for test patterns)
+
+**Development Pattern:**
+- TDD: Write tests first, then implement
+- Migrations: Use .cjs extension
+- Auth: Cookie-based JWT (use generateToken from utils/jwt.js in tests)
+
+Please implement Phase 4: Favorites following the existing patterns.
+```
