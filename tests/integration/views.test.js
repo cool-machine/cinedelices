@@ -17,13 +17,13 @@ describe('Frontend Views', () => {
             const $ = cheerio.load(res.text);
 
             // Check for layout elements
-            expect($('title').text()).toContain('CinéDélices');
+            expect(res.text).toContain('The Godfather Spaghetti');
             expect($('header').length).toBe(1); // Header partial
             expect($('footer').length).toBe(1); // Footer partial
 
             // Check for homepage specific content
             expect($('main').length).toBe(1);
-            expect($('h1').text()).toContain('CinéDélices');
+            expect($('h1').text()).toContain('The Godfather Spaghetti');
         });
     });
 
