@@ -28,6 +28,10 @@ router.get('/profile/:id', viewController.getProfilePage);
 
 // Admin routes
 router.get('/admin', isAuthenticated, isAdmin, adminController.getDashboard);
+router.get('/admin/recipes', isAuthenticated, isAdmin, adminController.getAdminRecipesPage);
+router.get('/admin/recipes/:id/edit', isAuthenticated, isAdmin, adminController.getAdminEditRecipePage);
+router.put('/admin/recipes/:id', isAuthenticated, isAdmin, adminController.updateAdminRecipe);
+router.delete('/admin/recipes/:id', isAuthenticated, isAdmin, adminController.deleteAdminRecipe);
 
 // Rating & Review routes
 router.post('/recipes/:id/rate', isAuthenticated, viewController.rateRecipe);
