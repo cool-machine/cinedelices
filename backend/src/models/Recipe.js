@@ -40,6 +40,13 @@ export default (sequelize, DataTypes) => {
                 as: 'reviews',
                 onDelete: 'CASCADE'
             });
+
+            // Recipe has many Favorites
+            Recipe.hasMany(models.Favorite, {
+                foreignKey: 'recipe_id',
+                as: 'favorites',
+                onDelete: 'CASCADE'
+            });
         }
 
         /**

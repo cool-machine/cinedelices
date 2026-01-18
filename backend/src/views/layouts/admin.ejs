@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Admin - CinéDélices' %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <h2>Admin</h2>
+            <nav>
+                <ul>
+                    <li><a href="/admin">Dashboard</a></li>
+                    <li><a href="/admin/recipes">Recettes</a></li>
+                    <li><a href="/admin/categories">Catégories</a></li>
+                    <li><a href="/admin/users">Utilisateurs</a></li>
+                    <li><a href="/admin/media">Médias</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="admin-content">
+            <%- body %>
+        </main>
+    </div>
+</body>
+
+</html>

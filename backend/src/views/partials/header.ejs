@@ -5,8 +5,15 @@
         </div>
         <ul>
             <li><a href="/recipes">Recettes</a></li>
-            <li><a href="/login">Connexion</a></li>
-            <li><a href="/register">Inscription</a></li>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <li><a href="/recipes/new">Ajouter une recette</a></li>
+                <li><a href="/favorites">Mes Favoris</a></li>
+                <li><a href="/profile/<%= user.id %>">Mon Profil</a></li>
+                <li><a href="/logout">Déconnexion</a></li>
+            <% } else { %>
+                <li><a href="/login">Connexion</a></li>
+                <li><a href="/register">Inscription</a></li>
+            <% } %>
         </ul>
     </nav>
 </header>

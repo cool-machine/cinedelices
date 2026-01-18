@@ -1,8 +1,18 @@
 <div class="recipe-detail">
     <div class="recipe-header">
-        <h1>
-            <%= recipe.title %>
-        </h1>
+        <div class="title-row">
+            <h1>
+                <%= recipe.title %>
+            </h1>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <form action="/recipes/<%= recipe.id %>/favorite" method="POST" class="favorite-form">
+                    <button type="submit" class="favorite-btn <%= isFavorited ? 'is-favorited' : '' %>" 
+                            title="<%= isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris' %>">
+                        <%= isFavorited ? '❤️' : '🤍' %>
+                    </button>
+                </form>
+            <% } %>
+        </div>
         <% if (recipe.media) { %>
             <p class="subtitle">Inspiré de : <strong>
                     <%= recipe.media.title %>

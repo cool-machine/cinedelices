@@ -2,7 +2,7 @@ import db from '../models/index.js';
 import argon2 from 'argon2';
 import { generateToken } from '../utils/jwt.js';
 
-const { Recipe, User, Category, Media, Rating, Review } = db;
+const { Recipe, User, Category, Media, Rating, Review, Favorite } = db;
 
 export const getHomePage = async (req, res) => {
     try {
@@ -115,8 +115,13 @@ export const getRecipeDetailPage = async (req, res) => {
 
         // Get user's rating if logged in
         let userRating = null;
+        let isFavorited = false;
         if (req.user) {
             userRating = recipe.ratings.find(r => r.user_id === req.user.id);
+            const favorite = await Favorite.findOne({
+                where: { user_id: req.user.id, recipe_id: req.params.id }
+            });
+            isFavorited = !!favorite;
         }
 
         res.render('recipes/show', {
@@ -124,7 +129,8 @@ export const getRecipeDetailPage = async (req, res) => {
             recipe,
             averageRating,
             userRating,
-            ratingCount: recipe.ratings ? recipe.ratings.length : 0
+            ratingCount: recipe.ratings ? recipe.ratings.length : 0,
+            isFavorited
         });
     } catch (error) {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
@@ -166,6 +172,10 @@ export const handleLogin = async (req, res) => {
         const token = generateToken({ id: user.id, email: user.email, role: user.role });
         res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 24h
 
+        if (!user.avatar_url && !user.bio) {
+            return res.redirect('/profile/edit');
+        }
+
         res.redirect('/');
     } catch (error) {
         res.render('auth/login', {
@@ -200,6 +210,11 @@ export const handleRegister = async (req, res) => {
             error: 'Une erreur est survenue'
         });
     }
+};
+
+export const handleLogout = (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/');
 };
 
 // Recipe CRUD
@@ -398,6 +413,62 @@ export const createReview = async (req, res) => {
         });
 
         res.redirect(`/recipes/${recipeId}`);
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+// Favorites
+export const toggleFavorite = async (req, res) => {
+    try {
+        const recipeId = req.params.id;
+
+        const recipe = await Recipe.findByPk(recipeId);
+        if (!recipe) {
+            return res.status(404).render('404', { title: 'Recette introuvable' });
+        }
+
+        const existingFavorite = await Favorite.findOne({
+            where: { user_id: req.user.id, recipe_id: recipeId }
+        });
+
+        if (existingFavorite) {
+            await existingFavorite.destroy();
+        } else {
+            await Favorite.create({
+                user_id: req.user.id,
+                recipe_id: recipeId
+            });
+        }
+
+        const referer = req.get('Referer') || `/recipes/${recipeId}`;
+        res.redirect(referer);
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const getFavoritesPage = async (req, res) => {
+    try {
+        const favorites = await Favorite.findAll({
+            where: { user_id: req.user.id },
+            include: [{
+                model: Recipe,
+                as: 'recipe',
+                include: [
+                    { model: Media, as: 'media' },
+                    { model: Category, as: 'category' }
+                ]
+            }],
+            order: [['created_at', 'DESC']]
+        });
+
+        const recipes = favorites.map(f => f.recipe);
+
+        res.render('favorites/index', {
+            title: 'Mes Favoris - CinéDélices',
+            recipes
+        });
     } catch (error) {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
     }

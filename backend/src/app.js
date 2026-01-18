@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
 import router from './routes/index.js';
 import viewRoutes from './routes/viewRoutes.js';
+import { verifyToken } from './utils/jwt.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -34,6 +35,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Extract user from token for all views (optional auth)
+app.use((req, res, next) => {
+    try {
+        const token = req.cookies?.token;
+        if (token) {
+            const decoded = verifyToken(token);
+            req.user = decoded;
+            res.locals.user = decoded;
+        }
+    } catch (error) {
+        // Token invalid or expired - continue without user
+    }
+    next();
+});
 
 // Routing - API
 app.use('/api/v1', router);

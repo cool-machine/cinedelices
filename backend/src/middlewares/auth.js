@@ -53,6 +53,9 @@ export const isAuthenticated = (req, res, next) => {
  */
 export const isAdmin = (req, res, next) => {
     if (!req.user || req.user.role !== 'admin') {
+        if (req.accepts('html')) {
+            return res.status(403).render('403', { title: 'Accès refusé' });
+        }
         return res.status(403).json({ message: 'Admin access required' });
     }
     next();
