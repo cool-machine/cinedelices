@@ -2,7 +2,7 @@ import db from '../models/index.js';
 import argon2 from 'argon2';
 import { generateToken } from '../utils/jwt.js';
 
-const { Recipe, User, Category, Media } = db;
+const { Recipe, User, Category, Media, Rating, Review } = db;
 
 export const getHomePage = async (req, res) => {
     try {
@@ -92,7 +92,13 @@ export const getRecipeDetailPage = async (req, res) => {
             include: [
                 { model: User, as: 'author' },
                 { model: Category, as: 'category' },
-                { model: Media, as: 'media' }
+                { model: Media, as: 'media' },
+                { model: Rating, as: 'ratings' },
+                {
+                    model: Review,
+                    as: 'reviews',
+                    include: [{ model: User, as: 'author' }]
+                }
             ]
         });
 
@@ -100,9 +106,25 @@ export const getRecipeDetailPage = async (req, res) => {
             return res.status(404).render('404', { title: 'Recette introuvable' });
         }
 
+        // Calculate average rating
+        let averageRating = 0;
+        if (recipe.ratings && recipe.ratings.length > 0) {
+            const total = recipe.ratings.reduce((sum, r) => sum + r.stars, 0);
+            averageRating = (total / recipe.ratings.length).toFixed(1);
+        }
+
+        // Get user's rating if logged in
+        let userRating = null;
+        if (req.user) {
+            userRating = recipe.ratings.find(r => r.user_id === req.user.id);
+        }
+
         res.render('recipes/show', {
             title: `${recipe.title} - CinéDélices`,
-            recipe
+            recipe,
+            averageRating,
+            userRating,
+            ratingCount: recipe.ratings ? recipe.ratings.length : 0
         });
     } catch (error) {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
@@ -338,5 +360,45 @@ export const updateProfile = async (req, res) => {
             user,
             error: 'Erreur lors de la mise à jour'
         });
+    }
+};
+
+// Rating
+export const rateRecipe = async (req, res) => {
+    try {
+        const { stars } = req.body;
+        const recipeId = req.params.id;
+
+        // Upsert: create or update rating
+        const [rating, created] = await Rating.findOrCreate({
+            where: { user_id: req.user.id, recipe_id: recipeId },
+            defaults: { stars: parseInt(stars) }
+        });
+
+        if (!created) {
+            await rating.update({ stars: parseInt(stars) });
+        }
+
+        res.redirect(`/recipes/${recipeId}`);
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+// Review
+export const createReview = async (req, res) => {
+    try {
+        const { content } = req.body;
+        const recipeId = req.params.id;
+
+        await Review.create({
+            user_id: req.user.id,
+            recipe_id: recipeId,
+            content
+        });
+
+        res.redirect(`/recipes/${recipeId}`);
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
     }
 };

@@ -24,4 +24,8 @@ router.get('/profile/edit', isAuthenticated, viewController.getEditProfilePage);
 router.put('/profile/edit', isAuthenticated, viewController.updateProfile);
 router.get('/profile/:id', viewController.getProfilePage);
 
+// Rating & Review routes
+router.post('/recipes/:id/rate', isAuthenticated, viewController.rateRecipe);
+router.post('/recipes/:id/reviews', isAuthenticated, viewController.createReview);
+
 export default router;

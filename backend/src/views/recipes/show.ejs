@@ -8,15 +8,24 @@
                     <%= recipe.media.title %>
                 </strong> (<%= recipe.media.type %>)</p>
             <% } %>
+                <div class="average-rating">
+                    <span class="stars">
+                        <% for (let i=1; i <=5; i++) { %>
+                            <% if (i <=Math.round(averageRating)) { %>★<% } else { %>☆<% } %>
+                                        <% } %>
+                    </span>
+                    <span class="rating-value">
+                        <%= averageRating %>/5
+                    </span>
+                    <span class="rating-count">(<%= ratingCount %> avis)</span>
+                </div>
     </div>
 
     <div class="recipe-meta">
         <span>Difficulté : <%= recipe.difficulty %></span>
-        <% if (recipe.prep_time) { %>
-            <span>Préparation : <%= recipe.prep_time %> min</span>
+        <% if (recipe.prep_time) { %><span>Préparation : <%= recipe.prep_time %> min</span>
             <% } %>
-                <% if (recipe.cook_time) { %>
-                    <span>Cuisson : <%= recipe.cook_time %> min</span>
+                <% if (recipe.cook_time) { %><span>Cuisson : <%= recipe.cook_time %> min</span>
                     <% } %>
     </div>
 
@@ -41,7 +50,7 @@
                                 <section class="ingredients">
                                     <h3>Ingrédients</h3>
                                     <div class="text-content">
-                                        <%= recipe.ingredients %> <!-- Helper needed for newlines -->
+                                        <%= recipe.ingredients %>
                                     </div>
                                 </section>
 
@@ -55,7 +64,59 @@
                 </div>
     </div>
 
-    <div class="actions">
-        <a href="/recipes" class="btn-secondary">Retour aux recettes</a>
-    </div>
+    <!-- Rating Form -->
+    <% if (typeof user !=='undefined' && user) { %>
+        <div class="rating-section">
+            <h3>Noter cette recette</h3>
+            <form action="/recipes/<%= recipe.id %>/rate" method="POST" class="rating-form">
+                <div class="star-rating">
+                    <% for (let i=5; i>= 1; i--) { %>
+                        <input type="radio" name="stars" value="<%= i %>" id="star<%= i %>" <%=userRating &&
+                            userRating.stars===i ? 'checked' : '' %>>
+                        <label for="star<%= i %>">★</label>
+                        <% } %>
+                </div>
+                <button type="submit" class="btn btn-gold btn-small">Valider</button>
+            </form>
+        </div>
+        <% } %>
+
+            <!-- Reviews Section -->
+            <div class="reviews-section">
+                <h3>Commentaires</h3>
+
+                <% if (typeof user !=='undefined' && user) { %>
+                    <form action="/recipes/<%= recipe.id %>/reviews" method="POST" class="review-form">
+                        <textarea name="content" rows="3" placeholder="Partagez votre expérience..." required
+                            minlength="10"></textarea>
+                        <button type="submit" class="btn btn-gold">Publier</button>
+                    </form>
+                    <% } %>
+
+                        <div class="reviews-list">
+                            <% if (recipe.reviews && recipe.reviews.length> 0) { %>
+                                <% recipe.reviews.forEach(review=> { %>
+                                    <div class="review-card">
+                                        <div class="review-header">
+                                            <strong>
+                                                <%= review.author ? review.author.username : 'Utilisateur' %>
+                                            </strong>
+                                            <span class="review-date">
+                                                <%= new Date(review.created_at).toLocaleDateString('fr-FR') %>
+                                            </span>
+                                        </div>
+                                        <p class="review-content">
+                                            <%= review.content %>
+                                        </p>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p class="no-reviews">Aucun commentaire pour le moment.</p>
+                                            <% } %>
+                        </div>
+            </div>
+
+            <div class="actions">
+                <a href="/recipes" class="btn btn-secondary">Retour aux recettes</a>
+            </div>
 </div>
