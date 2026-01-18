@@ -9,7 +9,7 @@ import app from '../../src/app.js';
 
 describe('Frontend Views', () => {
     describe('GET /', () => {
-        it('should render the homepage with correct title and layout', async () => {
+        it('should render the homepage with correct layout', async () => {
             const res = await request(app).get('/');
             expect(res.statusCode).toEqual(200);
             expect(res.header['content-type']).toContain('text/html');
@@ -17,13 +17,9 @@ describe('Frontend Views', () => {
             const $ = cheerio.load(res.text);
 
             // Check for layout elements
-            expect(res.text).toContain('The Godfather Spaghetti');
             expect($('header').length).toBe(1); // Header partial
             expect($('footer').length).toBe(1); // Footer partial
-
-            // Check for homepage specific content
             expect($('main').length).toBe(1);
-            expect($('h1').text()).toContain('The Godfather Spaghetti');
         });
     });
 

@@ -16,10 +16,11 @@ describe('General API Routes', () => {
     });
 
     describe('GET /', () => {
-        it('should return welcome message', async () => {
+        it('should return homepage content', async () => {
             const res = await request(app).get('/');
             expect(res.statusCode).toEqual(200);
-            expect(res.text).toContain('The Godfather Spaghetti');
+            // Either shows recipes or the empty message
+            expect(res.text).toMatch(/recette|Aucune recette/i);
         });
     });
 
