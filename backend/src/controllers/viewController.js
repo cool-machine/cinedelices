@@ -275,3 +275,68 @@ export const deleteRecipe = async (req, res) => {
         res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
     }
 };
+
+// User Profile
+export const getProfilePage = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Recipe,
+                    as: 'recipes',
+                    include: [
+                        { model: Category, as: 'category' },
+                        { model: Media, as: 'media' }
+                    ]
+                }
+            ],
+            order: [[{ model: Recipe, as: 'recipes' }, 'created_at', 'DESC']]
+        });
+
+        if (!user) {
+            return res.status(404).render('404', { title: 'Utilisateur introuvable' });
+        }
+
+        res.render('profile/show', {
+            title: `Profil de ${user.username} - CinéDélices`,
+            profileUser: user,
+            isOwnProfile: req.user && req.user.id === user.id
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const getEditProfilePage = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        res.render('profile/edit', {
+            title: 'Modifier mon profil - CinéDélices',
+            user
+        });
+    } catch (error) {
+        res.status(500).render('500', { title: 'Erreur Serveur', error: error.message });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { username, bio, avatar_url } = req.body;
+        const user = await User.findByPk(req.user.id);
+
+        await user.update({
+            username,
+            bio,
+            avatar_url
+        });
+
+        res.redirect(`/profile/${user.id}`);
+    } catch (error) {
+        const user = await User.findByPk(req.user.id);
+        res.render('profile/edit', {
+            title: 'Modifier mon profil - CinéDélices',
+            user,
+            error: 'Erreur lors de la mise à jour'
+        });
+    }
+};

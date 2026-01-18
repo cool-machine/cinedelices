@@ -52,6 +52,14 @@ export default (sequelize, DataTypes) => {
             type: DataTypes.ENUM('user', 'admin'),
             allowNull: false,
             defaultValue: 'user'
+        },
+        avatar_url: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        bio: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     }, {
         sequelize,

@@ -19,4 +19,9 @@ router.get('/register', viewController.getRegisterPage);
 router.post('/login', viewController.handleLogin);
 router.post('/register', viewController.handleRegister);
 
+// Profile routes
+router.get('/profile/edit', isAuthenticated, viewController.getEditProfilePage);
+router.put('/profile/edit', isAuthenticated, viewController.updateProfile);
+router.get('/profile/:id', viewController.getProfilePage);
+
 export default router;
