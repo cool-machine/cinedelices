@@ -9,7 +9,8 @@ export default (sequelize, DataTypes) => {
             // Media has many recipes
             Media.hasMany(models.Recipe, {
                 foreignKey: 'media_id',
-                as: 'recipes'
+                as: 'recipes',
+                onDelete: 'SET NULL'
             });
         }
     }

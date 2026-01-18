@@ -9,19 +9,22 @@ export default (sequelize, DataTypes) => {
             // Recipe belongs to User
             Recipe.belongsTo(models.User, {
                 foreignKey: 'user_id',
-                as: 'author'
+                as: 'author',
+                onDelete: 'CASCADE'
             });
 
             // Recipe belongs to Category
             Recipe.belongsTo(models.Category, {
                 foreignKey: 'category_id',
-                as: 'category'
+                as: 'category',
+                onDelete: 'SET NULL'
             });
 
             // Recipe belongs to Media
             Recipe.belongsTo(models.Media, {
                 foreignKey: 'media_id',
-                as: 'media'
+                as: 'media',
+                onDelete: 'SET NULL'
             });
         }
 

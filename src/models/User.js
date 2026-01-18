@@ -9,7 +9,8 @@ export default (sequelize, DataTypes) => {
             // User has many recipes
             User.hasMany(models.Recipe, {
                 foreignKey: 'user_id',
-                as: 'recipes'
+                as: 'recipes',
+                onDelete: 'CASCADE'
             });
         }
 

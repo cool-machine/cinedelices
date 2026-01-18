@@ -9,7 +9,8 @@ export default (sequelize, DataTypes) => {
             // Category has many recipes
             Category.hasMany(models.Recipe, {
                 foreignKey: 'category_id',
-                as: 'recipes'
+                as: 'recipes',
+                onDelete: 'SET NULL'
             });
         }
     }
