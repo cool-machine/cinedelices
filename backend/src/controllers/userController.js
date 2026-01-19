@@ -86,6 +86,11 @@ export const deleteUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Only allow user to delete their own account (or admin)
+        if (req.user.id !== user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
         await user.destroy();
         res.status(204).send();
     } catch (error) {

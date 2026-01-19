@@ -50,6 +50,28 @@
             saving = false;
         }
     }
+
+    async function handleDeleteAccount() {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) {
+            return;
+        }
+
+        const confirmName = prompt(`Pour confirmer, tapez "${$auth.user.username}" :`);
+        if (confirmName !== $auth.user.username) {
+            alert('Nom d\'utilisateur incorrect. Suppression annulée.');
+            return;
+        }
+
+        try {
+            loading = true;
+            await api.deleteUser($auth.user.id);
+            await auth.logout();
+            push('/');
+        } catch (e) {
+            error = e.message;
+            loading = false;
+        }
+    }
 </script>
 
 <div class="profile-edit-page">
@@ -122,6 +144,15 @@
                 </button>
             </div>
         </form>
+        </form>
+
+        <div class="delete-account-section">
+            <h3>Zone Danger</h3>
+            <p>La suppression de votre compte est irréversible. Toutes vos données (recettes, favoris, commentaires) seront définitivement effacées.</p>
+            <button type="button" class="delete-btn" on:click={handleDeleteAccount}>
+                Supprimer mon compte
+            </button>
+        </div>
     {/if}
 </div>
 
@@ -232,5 +263,36 @@
     button:disabled {
         opacity: 0.7;
         cursor: not-allowed;
+    }
+    button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .delete-account-section {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid #333;
+    }
+
+    .delete-account-section h3 {
+        color: #e94560;
+        margin-bottom: 1rem;
+    }
+
+    .delete-account-section p {
+        color: #ccc;
+        margin-bottom: 1.5rem;
+    }
+
+    .delete-btn {
+        background-color: transparent;
+        border: 2px solid #e94560;
+        color: #e94560;
+    }
+
+    .delete-btn:hover {
+        background-color: #e94560;
+        color: white;
     }
 </style>

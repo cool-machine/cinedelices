@@ -11,7 +11,7 @@ async function request(endpoint, options = {}) {
     };
 
     const response = await fetch(`${API_BASE}${endpoint}`, config);
-    
+
     if (!response.ok) {
         const error = await response.json().catch(() => ({ message: 'Request failed' }));
         throw new Error(error.message || `HTTP ${response.status}`);
@@ -44,6 +44,7 @@ export const api = {
     // Users
     getUser: (id) => request(`/users/${id}`),
     updateUser: (id, data) => request(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    deleteUser: (id) => request(`/users/${id}`, { method: 'DELETE' }),
 
     // Favorites
     getFavorites: () => request('/favorites'),

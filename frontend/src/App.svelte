@@ -1,9 +1,11 @@
 <script>
-  import Router from 'svelte-spa-router';
-  import { onMount } from 'svelte';
-  import { routes } from './routes.js';
-  import { auth } from './lib/stores/auth.js';
-  import Navbar from './components/Navbar.svelte';
+  import Router from "svelte-spa-router";
+  import { onMount } from "svelte";
+  import { routes } from "./routes.js";
+  import { auth } from "./lib/stores/auth.js";
+  import Navbar from "./components/Navbar.svelte";
+  import Footer from "./components/Footer.svelte";
+  import CookieBanner from "./components/CookieBanner.svelte";
 
   onMount(() => {
     auth.init();
@@ -16,6 +18,8 @@
     <main>
       <Router {routes} />
     </main>
+    <Footer />
+    <CookieBanner />
   {:else}
     <div class="loading">Chargement...</div>
   {/if}

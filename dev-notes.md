@@ -443,13 +443,13 @@ npm install @google/generative-ai
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 3.28 | Créer page mentions légales | `views/pages/legal.ejs` | Infos légales obligatoires |
-| 3.29 | Créer page politique confidentialité | `views/pages/privacy.ejs` | RGPD, cookies |
-| 3.30 | Ajouter bannière cookies | JavaScript + CSS | Consentement utilisateur |
-| 3.31 | Ajouter formulaire contact | `views/pages/contact.ejs` | Demande suppression données |
-| 3.32 | Implémenter suppression compte | Profil utilisateur | Droit à l'oubli |
-| 3.33 | Tester conformité RGPD | Checklist | Toutes obligations |
-| 3.34 | Commit RGPD | `git commit -m "feat(legal): add GDPR compliance pages"` | |
+| 3.28 | Créer page mentions légales | `views/pages/legal.ejs` | Infos légales obligatoires | ✅ |
+| 3.29 | Créer page politique confidentialité | `views/pages/privacy.ejs` | RGPD, cookies | ✅ |
+| 3.30 | Ajouter bannière cookies | JavaScript + CSS | Consentement utilisateur | ✅ |
+| 3.31 | Ajouter formulaire contact | `views/pages/contact.ejs` | Demande suppression données (Mailto link) | ✅ |
+| 3.32 | Implémenter suppression compte | Profil utilisateur | Droit à l'oubli | ✅ |
+| 3.33 | Tester conformité RGPD | Checklist | Toutes obligations | ✅ |
+| 3.34 | Commit RGPD | `git commit -m "feat(legal): add GDPR compliance pages"` | | ✅ |
 
 #### Semaine 3 - Jours 6-7 : CI/CD & Déploiement Azure
 

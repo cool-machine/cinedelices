@@ -14,6 +14,9 @@ import AdminCategories from './pages/admin/Categories.svelte';
 import AdminMedia from './pages/admin/Media.svelte';
 import AdminUsers from './pages/admin/Users.svelte';
 import NotFound from './pages/NotFound.svelte';
+import Legal from './pages/Legal.svelte';
+import Privacy from './pages/Privacy.svelte';
+
 
 export const routes = {
     '/': Home,
@@ -31,5 +34,7 @@ export const routes = {
     '/admin/categories': AdminCategories,
     '/admin/media': AdminMedia,
     '/admin/users': AdminUsers,
+    '/legal': Legal,
+    '/privacy': Privacy,
     '*': NotFound
 };
