@@ -80,14 +80,14 @@ Ciné Délices est un site web de recettes de cuisine inspirées du cinéma et d
 
 | # | Tâche | Commande/Action | Livrable |
 |---|-------|-----------------|----------|
-| 1.1 | Créer le repository GitHub | GitHub → New Repository "cinedelices" | Repo GitHub |
-| 1.2 | Cloner le repository | `git clone <url>` | Dossier local |
-| 1.3 | Créer la branche develop | `git checkout -b develop` | Branche develop |
-| 1.4 | Initialiser le projet Node.js | `npm init -y` | `package.json` |
-| 1.5 | Créer la structure de dossiers | Voir structure ci-dessous | Arborescence projet |
-| 1.6 | Créer le fichier `.gitignore` | Copier template Node.js | `.gitignore` |
-| 1.7 | Créer `.env.example` | Variables d'environnement | `.env.example` |
-| 1.8 | Premier commit | `git commit -m "chore: initial project setup"` | Commit initial |
+| 1.1 | Créer le repository GitHub | GitHub → New Repository "cinedelices" | Repo GitHub | ✅ |
+| 1.2 | Cloner le repository | `git clone <url>` | Dossier local | ✅ |
+| 1.3 | Créer la branche develop | `git checkout -b develop` | Branche develop | ✅ |
+| 1.4 | Initialiser le projet Node.js | `npm init -y` | `package.json` | ✅ |
+| 1.5 | Créer la structure de dossiers | Voir structure ci-dessous | Arborescence projet | ✅ |
+| 1.6 | Créer le fichier `.gitignore` | Copier template Node.js | `.gitignore` | ✅ |
+| 1.7 | Créer `.env.example` | Variables d'environnement | `.env.example` | ✅ |
+| 1.8 | Premier commit | `git commit -m "chore: initial project setup"` | Commit initial | ✅ |
 
 **Structure de dossiers à créer (Sprint 1.5) :**
 ```
@@ -103,18 +103,18 @@ mkdir -p docker
 
 | # | Tâche | Commande | Justification |
 |---|-------|----------|---------------|
-| 1.9 | Installer Express | `npm i express` | Framework HTTP |
-| 1.10 | Installer EJS | `npm i ejs` | Moteur de templates |
-| 1.11 | Installer Sequelize + pg | `npm i sequelize pg pg-hstore` | ORM + driver PostgreSQL |
-| 1.12 | Installer argon2 | `npm i argon2` | Hachage mots de passe (plus sécurisé que bcrypt) |
-| 1.13 | Installer bcrypt (backup) | `npm i bcrypt` | Alternative si argon2 pose problème |
-| 1.14 | Installer express-session | `npm i express-session` | Gestion des sessions |
-| 1.15 | Installer dotenv | `npm i dotenv` | Variables d'environnement |
-| 1.16 | Installer express-validator | `npm i express-validator` | Validation des entrées |
-| 1.17 | Installer joi | `npm i joi` | Validation de schémas (alternative) |
-| 1.18 | Installer cors | `npm i cors` | Cross-Origin Requests |
-| 1.19 | Installer dépendances dev | `npm i -D nodemon eslint jest` | Dev tools |
-| 1.20 | Commit dépendances | `git commit -m "chore(deps): add core dependencies"` | |
+| 1.9 | Installer Express | `npm i express` | Framework HTTP | ✅ |
+| 1.10 | Installer EJS | `npm i ejs` | Moteur de templates | ✅ |
+| 1.11 | Installer Sequelize + pg | `npm i sequelize pg pg-hstore` | ORM + driver PostgreSQL | ✅ |
+| 1.12 | Installer argon2 | `npm i argon2` | Hachage mots de passe (plus sécurisé que bcrypt) | ✅ |
+| 1.13 | Installer bcrypt (backup) | `npm i bcrypt` | Alternative si argon2 pose problème | ✅ |
+| 1.14 | Installer express-session | `npm i express-session` | Gestion des sessions | ✅ |
+| 1.15 | Installer dotenv | `npm i dotenv` | Variables d'environnement | ✅ |
+| 1.16 | Installer express-validator | `npm i express-validator` | Validation des entrées | ✅ |
+| 1.17 | Installer joi | `npm i joi` | Validation de schémas (alternative) | ✅ |
+| 1.18 | Installer cors | `npm i cors` | Cross-Origin Requests | ✅ |
+| 1.19 | Installer dépendances dev | `npm i -D nodemon eslint jest` | Dev tools | ✅ |
+| 1.20 | Commit dépendances | `git commit -m "chore(deps): add core dependencies"` | | ✅ |
 
 **Note sur les images** : Pour le MVP, les recettes utiliseront des **URLs d'images** (texte) au lieu d'uploads. Cela évite d'utiliser multer et simplifie le projet.
 
@@ -122,73 +122,73 @@ mkdir -p docker
 
 | # | Tâche | Action | Livrable |
 |---|-------|--------|----------|
-| 1.21 | Créer `Dockerfile` | Multi-stage build pour production | `Dockerfile` |
-| 1.22 | Créer `Dockerfile.dev` | Configuration développement | `docker/Dockerfile.dev` |
-| 1.23 | Créer `docker-compose.yml` | Services app + db | `docker-compose.yml` |
-| 1.24 | Créer `docker-compose.dev.yml` | Config développement avec volumes | `docker-compose.dev.yml` |
-| 1.25 | Lancer les containers | `docker-compose -f docker-compose.dev.yml up -d` | Containers démarrés |
-| 1.26 | Vérifier PostgreSQL | `docker exec -it cinedelices-db psql -U user -d cinedelices` | Connexion BDD OK |
-| 1.27 | Configurer Sequelize | Créer `src/config/database.js` | Config Sequelize |
-| 1.28 | Initialiser Sequelize CLI | `npx sequelize-cli init` | Dossiers migrations/seeders |
-| 1.29 | Commit Docker setup | `git commit -m "chore(docker): add containerization"` | |
+| 1.21 | Créer `Dockerfile` | Multi-stage build pour production | `Dockerfile` | ✅ |
+| 1.22 | Créer `Dockerfile.dev` | Configuration développement | `docker/Dockerfile.dev` | ✅ |
+| 1.23 | Créer `docker-compose.yml` | Services app + db | `docker-compose.yml` | ✅ |
+| 1.24 | Créer `docker-compose.dev.yml` | Config développement avec volumes | `docker-compose.dev.yml` | ✅ |
+| 1.25 | Lancer les containers | `docker-compose -f docker-compose.dev.yml up -d` | Containers démarrés | ✅ |
+| 1.26 | Vérifier PostgreSQL | `docker exec -it cinedelices-db psql -U user -d cinedelices` | Connexion BDD OK | ✅ |
+| 1.27 | Configurer Sequelize | Créer `src/config/database.js` | Config Sequelize | ✅ |
+| 1.28 | Initialiser Sequelize CLI | `npx sequelize-cli init` | Dossiers migrations/seeders | ✅ |
+| 1.29 | Commit Docker setup | `git commit -m "chore(docker): add containerization"` | | ✅ |
 
 #### Jour 4 : Création des Modèles Sequelize
 
 | # | Tâche | Fichier | Champs principaux |
 |---|-------|---------|-------------------|
-| 1.30 | Créer modèle User | `src/models/User.js` | id, email, password_hash, username, role, created_at |
-| 1.31 | Créer modèle Category | `src/models/Category.js` | id, name, description |
-| 1.32 | Créer modèle Media | `src/models/Media.js` | id, title, type, image_url, release_year |
-| 1.33 | Créer modèle Recipe | `src/models/Recipe.js` | id, title, description, ingredients, instructions, difficulty, prep_time, cook_time, image_url, user_id, category_id, media_id |
-| 1.34 | Créer fichier index models | `src/models/index.js` | Associations et export |
-| 1.35 | Définir les associations | Dans index.js | User→Recipe, Category→Recipe, Media→Recipe |
-| 1.36 | Créer la migration initiale | `npx sequelize-cli migration:generate --name create-tables` | Migration |
-| 1.37 | Exécuter la migration | `npx sequelize-cli db:migrate` | Tables créées |
-| 1.38 | Créer les seeders | `npx sequelize-cli seed:generate --name demo-data` | Données de test |
-| 1.39 | Exécuter les seeders | `npx sequelize-cli db:seed:all` | Données insérées |
-| 1.40 | Commit modèles | `git commit -m "feat(models): add Sequelize models and migrations"` | |
+| 1.30 | Créer modèle User | `src/models/User.js` | id, email, password_hash, username, role, created_at | ✅ |
+| 1.31 | Créer modèle Category | `src/models/Category.js` | id, name, description | ✅ |
+| 1.32 | Créer modèle Media | `src/models/Media.js` | id, title, type, image_url, release_year | ✅ |
+| 1.33 | Créer modèle Recipe | `src/models/Recipe.js` | id, title, description, ingredients, instructions, difficulty, prep_time, cook_time, image_url, user_id, category_id, media_id | ✅ |
+| 1.34 | Créer fichier index models | `src/models/index.js` | Associations et export | ✅ |
+| 1.35 | Définir les associations | Dans index.js | User→Recipe, Category→Recipe, Media→Recipe | ✅ |
+| 1.36 | Créer la migration initiale | `npx sequelize-cli migration:generate --name create-tables` | Migration | ✅ |
+| 1.37 | Exécuter la migration | `npx sequelize-cli db:migrate` | Tables créées | ✅ |
+| 1.38 | Créer les seeders | `npx sequelize-cli seed:generate --name demo-data` | Données de test | ✅ |
+| 1.39 | Exécuter les seeders | `npx sequelize-cli db:seed:all` | Données insérées | ✅ |
+| 1.40 | Commit modèles | `git commit -m "feat(models): add Sequelize models and migrations"` | | ✅ |
 
 #### Jour 5 : Structure Backend & Routes de Base
 
 | # | Tâche | Fichier | Contenu |
 |---|-------|---------|---------|
-| 1.41 | Créer le serveur principal | `server.js` | Express app, middlewares, port |
-| 1.42 | Créer le router principal | `src/routes/index.js` | Import de tous les routers |
-| 1.43 | Créer les routes recettes (API) | `src/routes/recipeRoutes.js` | GET /recipes, GET /recipes/:id, POST /recipes |
-| 1.44 | Créer les routes auth (API) | `src/routes/authRoutes.js` | POST /login, POST /register |
-| 1.45 | Créer les routes vues | `src/routes/viewRoutes.js` | Pages publiques + profils |
-| 1.46 | Créer les routes admin (views) | `src/routes/viewRoutes.js` | CRUD admin côté pages |
-| 1.47 | Créer middleware auth | `src/middlewares/authMiddleware.js` | isAuthenticated, isAdmin |
-| 1.48 | Créer middleware erreurs | `src/middlewares/errorHandler.js` | Gestion des erreurs globale |
-| 1.49 | Tester le serveur | `npm run dev` → `http://localhost:3000` | Serveur fonctionnel |
-| 1.50 | Commit structure backend | `git commit -m "feat(backend): add Express routes and middlewares"` | |
+| 1.41 | Créer le serveur principal | `server.js` | Express app, middlewares, port | ✅ |
+| 1.42 | Créer le router principal | `src/routes/index.js` | Import de tous les routers | ✅ |
+| 1.43 | Créer les routes recettes (API) | `src/routes/recipeRoutes.js` | GET /recipes, GET /recipes/:id, POST /recipes | ✅ |
+| 1.44 | Créer les routes auth (API) | `src/routes/authRoutes.js` | POST /login, POST /register | ✅ |
+| 1.45 | Créer les routes vues | `src/routes/viewRoutes.js` | Pages publiques + profils | ✅ |
+| 1.46 | Créer les routes admin (views) | `src/routes/viewRoutes.js` | CRUD admin côté pages | ✅ |
+| 1.47 | Créer middleware auth | `src/middlewares/authMiddleware.js` | isAuthenticated, isAdmin | ✅ |
+| 1.48 | Créer middleware erreurs | `src/middlewares/errorHandler.js` | Gestion des erreurs globale | ✅ |
+| 1.49 | Tester le serveur | `npm run dev` → `http://localhost:3000` | Serveur fonctionnel | ✅ |
+| 1.50 | Commit structure backend | `git commit -m "feat(backend): add Express routes and middlewares"` | | ✅ |
 
 #### Jours 6-7 : Intégration Frontend de Base
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 1.51 | Créer le layout principal | `src/views/layouts/main.ejs` | Header, footer, liens CSS/JS |
-| 1.52 | Créer le header partial | `src/views/partials/header.ejs` | Navigation, logo |
-| 1.53 | Créer le footer partial | `src/views/partials/footer.ejs` | Liens, copyright |
-| 1.54 | Créer la page d'accueil | `src/views/pages/home.ejs` | Hero, recettes populaires |
-| 1.55 | Créer la page catalogue | `src/views/pages/recipes.ejs` | Liste des recettes, filtres |
-| 1.56 | Créer la page recette | `src/views/pages/recipe-detail.ejs` | Détail complet de la recette |
-| 1.57 | Créer la page login | `src/views/pages/login.ejs` | Formulaire connexion |
-| 1.58 | Créer la page register | `src/views/pages/register.ejs` | Formulaire inscription |
-| 1.59 | Créer les styles CSS de base | `public/css/main.css` | Reset, variables, layout |
-| 1.60 | Créer les styles composants | `public/css/components.css` | Cards, buttons, forms |
-| 1.61 | Intégrer la charte graphique | Appliquer les couleurs/polices | Styles cohérents avec maquettes |
-| 1.62 | Tester le responsive | DevTools → Mobile view | Mobile-first validé |
-| 1.63 | Commit intégration frontend | `git commit -m "feat(frontend): add EJS views and CSS styles"` | |
-| 1.64 | Merge vers develop | `git checkout develop && git merge feature/setup` | PR merged |
+| 1.51 | Créer le layout principal | `src/views/layouts/main.ejs` | Header, footer, liens CSS/JS | ✅ |
+| 1.52 | Créer le header partial | `src/views/partials/header.ejs` | Navigation, logo | ✅ |
+| 1.53 | Créer le footer partial | `src/views/partials/footer.ejs` | Liens, copyright | ✅ |
+| 1.54 | Créer la page d'accueil | `src/views/pages/home.ejs` | Hero, recettes populaires | ✅ |
+| 1.55 | Créer la page catalogue | `src/views/pages/recipes.ejs` | Liste des recettes, filtres | ✅ |
+| 1.56 | Créer la page recette | `src/views/pages/recipe-detail.ejs` | Détail complet de la recette | ✅ |
+| 1.57 | Créer la page login | `src/views/pages/login.ejs` | Formulaire connexion | ✅ |
+| 1.58 | Créer la page register | `src/views/pages/register.ejs` | Formulaire inscription | ✅ |
+| 1.59 | Créer les styles CSS de base | `public/css/main.css` | Reset, variables, layout | ✅ |
+| 1.60 | Créer les styles composants | `public/css/components.css` | Cards, buttons, forms | ✅ |
+| 1.61 | Intégrer la charte graphique | Appliquer les couleurs/polices | Styles cohérents avec maquettes | ✅ |
+| 1.62 | Tester le responsive | DevTools → Mobile view | Mobile-first validé | ✅ |
+| 1.63 | Commit intégration frontend | `git commit -m "feat(frontend): add EJS views and CSS styles"` | | ✅ |
+| 1.64 | Merge vers develop | `git checkout develop && git merge feature/setup` | PR merged | ✅ |
 | 1.65 | **LIVRABLE SPRINT 1** | Démo locale fonctionnelle | ✅ Site navigable en local |
 
 **Critères de validation Sprint 1 :**
-- [ ] Le serveur démarre sans erreur (`npm run dev`)
-- [ ] La BDD est accessible et contient les tables MVP
-- [ ] Les pages principales s'affichent (accueil, catalogue, recette)
-- [ ] Docker fonctionne (`docker-compose up`)
-- [ ] Le code passe le linting (`npm run lint`)
+- [x] Le serveur démarre sans erreur (`npm run dev`)
+- [x] La BDD est accessible et contient les tables MVP
+- [x] Les pages principales s'affichent (accueil, catalogue, recette)
+- [x] Docker fonctionne (`docker-compose up`)
+- [x] Le code passe le linting (`npm run lint`)
 
 ---
 
@@ -200,64 +200,64 @@ mkdir -p docker
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.1 | Implémenter le hashage password | `src/controllers/authController.js` | bcrypt.hash() avec coût 12 |
-| 2.2 | Implémenter l'inscription | `authController.register()` | Validation, création user, redirection |
-| 2.3 | Implémenter la connexion | `authController.login()` | Vérification password, session |
-| 2.4 | Implémenter la déconnexion | `authController.logout()` | Destruction session |
-| 2.5 | Configurer express-session | `server.js` | Secret, cookie options, store |
-| 2.6 | Ajouter flash messages | `npm i connect-flash` | Messages de succès/erreur |
-| 2.7 | Créer middleware isAuthenticated | `authMiddleware.js` | Protection des routes |
-| 2.8 | Créer middleware isAdmin | `authMiddleware.js` | Accès admin uniquement |
-| 2.9 | Ajouter user aux locals | `server.js` middleware | `res.locals.user = req.session.user` |
-| 2.10 | Tester scénario complet | Manual testing | Register → Login → Access protected → Logout |
-| 2.11 | Commit auth | `git commit -m "feat(auth): implement authentication system"` | |
+| 2.1 | Implémenter le hashage password | `src/controllers/authController.js` | bcrypt.hash() avec coût 12 | ✅ |
+| 2.2 | Implémenter l'inscription | `authController.register()` | Validation, création user, redirection | ✅ |
+| 2.3 | Implémenter la connexion | `authController.login()` | Vérification password, session | ✅ |
+| 2.4 | Implémenter la déconnexion | `authController.logout()` | Destruction session | ✅ |
+| 2.5 | Configurer express-session | `server.js` | Secret, cookie options, store | ✅ |
+| 2.6 | Ajouter flash messages | `npm i connect-flash` | Messages de succès/erreur | ✅ |
+| 2.7 | Créer middleware isAuthenticated | `authMiddleware.js` | Protection des routes | ✅ |
+| 2.8 | Créer middleware isAdmin | `authMiddleware.js` | Accès admin uniquement | ✅ |
+| 2.9 | Ajouter user aux locals | `server.js` middleware | `res.locals.user = req.session.user` | ✅ |
+| 2.10 | Tester scénario complet | Manual testing | Register → Login → Access protected → Logout | ✅ |
+| 2.11 | Commit auth | `git commit -m "feat(auth): implement authentication system"` | | ✅ |
 
 #### Semaine 2 - Jour 3-4 : Catalogue & Recherche de Recettes
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.12 | Implémenter GET /recipes | `recipeController.getAll()` | Liste paginée avec filtres |
-| 2.13 | Ajouter filtre par catégorie | Query params `?category=` | Filter Sequelize where |
-| 2.14 | Ajouter recherche par titre | Query params `?search=` | ILIKE '%search%' |
-| 2.15 | Ajouter recherche par film/série | Query params `?media=` | Join avec Media |
-| 2.16 | Implémenter la pagination | Query params `?page=&limit=` | LIMIT + OFFSET |
-| 2.17 | Créer le composant RecipeCard | `views/partials/recipe-card.ejs` | Image, titre, catégorie, temps |
-| 2.18 | Créer les filtres UI | `views/pages/recipes.ejs` | Dropdown catégorie, search bar |
-| 2.19 | Ajouter tri des résultats | Query params `?sort=` | ORDER BY created_at, title |
-| 2.20 | Styliser le catalogue | `public/css/recipes.css` | Grid responsive, cards |
-| 2.21 | Tester les filtres | Manual testing | Toutes combinaisons de filtres |
-| 2.22 | Commit catalogue | `git commit -m "feat(recipes): add catalog with search and filters"` | |
+| 2.12 | Implémenter GET /recipes | `recipeController.getAll()` | Liste paginée avec filtres | ✅ |
+| 2.13 | Ajouter filtre par catégorie | Query params `?category=` | Filter Sequelize where | ✅ |
+| 2.14 | Ajouter recherche par titre | Query params `?search=` | ILIKE '%search%' | ✅ |
+| 2.15 | Ajouter recherche par film/série | Query params `?media=` | Join avec Media | ✅ |
+| 2.16 | Implémenter la pagination | Query params `?page=&limit=` | LIMIT + OFFSET | ✅ |
+| 2.17 | Créer le composant RecipeCard | `views/partials/recipe-card.ejs` | Image, titre, catégorie, temps | ✅ |
+| 2.18 | Créer les filtres UI | `views/pages/recipes.ejs` | Dropdown catégorie, search bar | ✅ |
+| 2.19 | Ajouter tri des résultats | Query params `?sort=` | ORDER BY created_at, title | ✅ |
+| 2.20 | Styliser le catalogue | `public/css/recipes.css` | Grid responsive, cards | ✅ |
+| 2.21 | Tester les filtres | Manual testing | Toutes combinaisons de filtres | ✅ |
+| 2.22 | Commit catalogue | `git commit -m "feat(recipes): add catalog with search and filters"` | | ✅ |
 
 #### Semaine 2 - Jour 5 : Page Détail Recette
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.23 | Implémenter GET /recipes/:id | `recipeController.getById()` | Eager loading associations |
-| 2.24 | Afficher les ingrédients | `recipe-detail.ejs` | Liste formatée |
-| 2.25 | Afficher les instructions | `recipe-detail.ejs` | Étapes numérotées |
-| 2.26 | Afficher le film/série associé | `recipe-detail.ejs` | Titre, affiche, année |
-| 2.27 | Afficher les informations | `recipe-detail.ejs` | Temps prépa, cuisson, difficulté |
-| 2.28 | Ajouter l'anecdote/contexte | `recipe-detail.ejs` | Section contexte cinéma |
-| 2.29 | Ajouter Schema.org Recipe | `<script type="application/ld+json">` | SEO structured data |
-| 2.30 | Styliser la page | `public/css/recipe-detail.css` | Layout 2 colonnes, responsive |
-| 2.31 | Tester page détail | Manual testing | Navigation depuis catalogue |
-| 2.32 | Commit page détail | `git commit -m "feat(recipes): add recipe detail page"` | |
+| 2.23 | Implémenter GET /recipes/:id | `recipeController.getById()` | Eager loading associations | ✅ |
+| 2.24 | Afficher les ingrédients | `recipe-detail.ejs` | Liste formatée | ✅ |
+| 2.25 | Afficher les instructions | `recipe-detail.ejs` | Étapes numérotées | ✅ |
+| 2.26 | Afficher le film/série associé | `recipe-detail.ejs` | Titre, affiche, année | ✅ |
+| 2.27 | Afficher les informations | `recipe-detail.ejs` | Temps prépa, cuisson, difficulté | ✅ |
+| 2.28 | Ajouter l'anecdote/contexte | `recipe-detail.ejs` | Section contexte cinéma | ✅ |
+| 2.29 | Ajouter Schema.org Recipe | `<script type="application/ld+json">` | SEO structured data | ✅ |
+| 2.30 | Styliser la page | `public/css/recipe-detail.css` | Layout 2 colonnes, responsive | ✅ |
+| 2.31 | Tester page détail | Manual testing | Navigation depuis catalogue | ✅ |
+| 2.32 | Commit page détail | `git commit -m "feat(recipes): add recipe detail page"` | | ✅ |
 
 #### Semaine 2 - Jours 6-7 : Ajout de Recette (Utilisateur Connecté)
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.33 | Créer GET /recipes/new | `recipeController.showCreateForm()` | Formulaire création (auth required) |
-| 2.34 | Créer le formulaire | `views/pages/recipe-form.ejs` | Tous les champs recette |
-| 2.35 | Charger catégories/médias | Controller | Dropdown dynamiques |
-| 2.36 | Ajouter champ URL image | `recipe-form.ejs` | Champ texte pour URL (pas d'upload fichier) |
-| 2.37 | Valider les entrées | express-validator | Règles de validation |
-| 2.38 | Implémenter POST /recipes | `recipeController.create()` | Création en BDD |
-| 2.39 | Ajouter messages de succès/erreur | Flash messages | Feedback utilisateur |
-| 2.40 | Protéger la route | `isAuthenticated` middleware | Redirection si non connecté |
-| 2.41 | Tester création recette | Manual testing | Formulaire complet → création |
-| 2.42 | Commit ajout recette | `git commit -m "feat(recipes): add recipe creation form"` | |
-| 2.43 | Merge vers develop | PR review + merge | Code review |
+| 2.33 | Créer GET /recipes/new | `recipeController.showCreateForm()` | Formulaire création (auth required) | ✅ |
+| 2.34 | Créer le formulaire | `views/pages/recipe-form.ejs` | Tous les champs recette | ✅ |
+| 2.35 | Charger catégories/médias | Controller | Dropdown dynamiques | ✅ |
+| 2.36 | Ajouter champ URL image | `recipe-form.ejs` | Champ texte pour URL (pas d'upload fichier) | ✅ |
+| 2.37 | Valider les entrées | express-validator | Règles de validation | ✅ |
+| 2.38 | Implémenter POST /recipes | `recipeController.create()` | Création en BDD | ✅ |
+| 2.39 | Ajouter messages de succès/erreur | Flash messages | Feedback utilisateur | ✅ |
+| 2.40 | Protéger la route | `isAuthenticated` middleware | Redirection si non connecté | ✅ |
+| 2.41 | Tester création recette | Manual testing | Formulaire complet → création | ✅ |
+| 2.42 | Commit ajout recette | `git commit -m "feat(recipes): add recipe creation form"` | | ✅ |
+| 2.43 | Merge vers develop | PR review + merge | Code review | ✅ |
 
 ---
 
@@ -274,15 +274,15 @@ mkdir -p docker
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.44b | Créer variable d'environnement | `.env` | `GEMINI_API_KEY`, `AI_ENABLED=true` |
-| 2.45b | Ajouter bouton "Suggérer avec l'IA" | `recipe-form.ejs` | Bouton affiché uniquement si média sélectionné |
-| 2.46b | Créer service IA | `src/services/aiRecipeService.js` | Appel API Gemini pour génération |
-| 2.47b | Créer endpoint génération | `recipeController.generateFromMedia()` | Route POST `/api/recipes/generate` |
-| 2.48b | Implémenter prompt template | `aiRecipeService.js` | Template structuré film → JSON recette |
-| 2.49b | Ajouter gestion front-end | `public/js/recipe-form.js` | Fetch API, loading state, pré-remplissage |
-| 2.50b | Gestion des erreurs | Frontend + Backend | Timeout, rate limit, fallback manuel |
-| 2.51b | Tester scénario complet | Manual testing | Sélection → Génération → Édition → Soumission |
-| 2.52b | Commit feature IA | Git | `feat(ai): add AI-assisted recipe generation` |
+| 2.44b | Créer variable d'environnement | `.env` | `GEMINI_API_KEY`, `AI_ENABLED=true` | ✅ |
+| 2.45b | Ajouter bouton "Suggérer avec l'IA" | `recipe-form.ejs` | Bouton affiché uniquement si média sélectionné | ✅ |
+| 2.46b | Créer service IA | `src/services/aiRecipeService.js` | Appel API Gemini pour génération | ✅ |
+| 2.47b | Créer endpoint génération | `recipeController.generateFromMedia()` | Route POST `/api/recipes/generate` | ✅ |
+| 2.48b | Implémenter prompt template | `aiRecipeService.js` | Template structuré film → JSON recette | ✅ |
+| 2.49b | Ajouter gestion front-end | `public/js/recipe-form.js` | Fetch API, loading state, pré-remplissage | ✅ |
+| 2.50b | Gestion des erreurs | Frontend + Backend | Timeout, rate limit, fallback manuel | ✅ |
+| 2.51b | Tester scénario complet | Manual testing | Sélection → Génération → Édition → Soumission | ✅ |
+| 2.52b | Commit feature IA | Git | `feat(ai): add AI-assisted recipe generation` | ✅ |
 
 **Choix Technique :**
 
@@ -346,7 +346,7 @@ npm install @google/generative-ai
 - [x] Catalogue avec recherche et filtres opérationnel
 - [x] Page détail recette complète
 - [x] Formulaire d'ajout de recette fonctionnel (utilisateurs connectés)
-- [ ] Tests manuels de tous les scénarios MVP passés
+- [x] Tests manuels de tous les scénarios MVP passés
 
 ---
 
@@ -356,18 +356,18 @@ npm install @google/generative-ai
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.44 | Créer layout admin | `views/admin/layout.ejs` | Sidebar, dashboard |
-| 2.45 | Créer dashboard admin | `views/admin/dashboard.ejs` | Stats: nb recettes, users, etc. |
-| 2.46 | CRUD Recettes (admin) | `adminController.recipes*()` | Liste, modifier, supprimer |
-| 2.47 | CRUD Catégories (admin) | `adminController.categories*()` | Ajouter, modifier, supprimer |
-| 2.48 | CRUD Utilisateurs (admin) | `adminController.users*()` | Liste, modifier rôle, supprimer |
-| 2.49 | CRUD Médias (admin) | `adminController.media*()` | Ajouter films/séries |
-| 2.50 | Tableaux de données | Admin tables | Pagination, tri, recherche |
-| 2.51 | Confirmation suppression | Modal JavaScript | Éviter suppressions accidentelles |
-| 2.52 | Styliser back-office | `public/css/admin.css` | Style pro, dark mode option |
-| 2.53 | Protéger toutes les routes | `isAdmin` middleware | Accès admin uniquement |
-| 2.54 | Tester back-office complet | Manual testing | Tous les CRUD |
-| 2.55 | Commit back-office | `git commit -m "feat(admin): add complete back-office"` | |
+| 2.44 | Créer layout admin | `views/admin/layout.ejs` | Sidebar, dashboard | ✅ |
+| 2.45 | Créer dashboard admin | `views/admin/dashboard.ejs` | Stats: nb recettes, users, etc. | ✅ |
+| 2.46 | CRUD Recettes (admin) | `adminController.recipes*()` | Liste, modifier, supprimer | ✅ |
+| 2.47 | CRUD Catégories (admin) | `adminController.categories*()` | Ajouter, modifier, supprimer | ✅ |
+| 2.48 | CRUD Utilisateurs (admin) | `adminController.users*()` | Liste, modifier rôle, supprimer | ✅ |
+| 2.49 | CRUD Médias (admin) | `adminController.media*()` | Ajouter films/séries | ✅ |
+| 2.50 | Tableaux de données | Admin tables | Pagination, tri, recherche | ✅ |
+| 2.51 | Confirmation suppression | Modal JavaScript | Éviter suppressions accidentelles | ✅ |
+| 2.52 | Styliser back-office | `public/css/admin.css` | Style pro, dark mode option | ✅ |
+| 2.53 | Protéger toutes les routes | `isAdmin` middleware | Accès admin uniquement | ✅ |
+| 2.54 | Tester back-office complet | Manual testing | Tous les CRUD | ✅ |
+| 2.55 | Commit back-office | `git commit -m "feat(admin): add complete back-office"` | | ✅ |
 | 2.56 | **LIVRABLE SPRINT 2** | MVP complet fonctionnel | ✅ Toutes fonctionnalités MVP (SPA Reactored) |
 
 ### 🔄 Sprint 2.5 : Refactorisation SPA (Architecture Moderne)
@@ -394,14 +394,14 @@ npm install @google/generative-ai
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 3.1 | Configurer Jest | `jest.config.js` | Configuration tests |
-| 3.2 | Écrire tests unitaires modèles | `tests/unit/models/` | Tests validation, méthodes |
-| 3.3 | Écrire tests controllers | `tests/unit/controllers/` | Tests logique métier |
-| 3.4 | Écrire tests routes (integration) | `tests/integration/` | Tests endpoints API |
-| 3.5 | Configurer couverture de code | `npm test -- --coverage` | Objectif > 60% |
-| 3.6 | Corriger les bugs identifiés | Selon résultats tests | Debug |
-| 3.7 | Exécuter linting complet | `npm run lint:fix` | Code propre |
-| 3.8 | Commit tests | `git commit -m "test: add unit and integration tests"` | |
+| 3.1 | Configurer Jest | `jest.config.js` | Configuration tests | ✅ |
+| 3.2 | Écrire tests unitaires modèles | `tests/unit/models/` | Tests validation, méthodes | ✅ |
+| 3.3 | Écrire tests controllers | `tests/unit/controllers/` | Tests logique métier | ✅ |
+| 3.4 | Écrire tests routes (integration) | `tests/integration/` | Tests endpoints API | ✅ |
+| 3.5 | Configurer couverture de code | `npm test -- --coverage` | Objectif > 60% | ✅ |
+| 3.6 | Corriger les bugs identifiés | Selon résultats tests | Debug | ✅ |
+| 3.7 | Exécuter linting complet | `npm run lint:fix` | Code propre | ✅ |
+| 3.8 | Commit tests | `git commit -m "test: add unit and integration tests"` | | ✅ |
 
 #### Semaine 3 - Jour 3 : Sécurité & Performance
 
@@ -412,13 +412,13 @@ npm install @google/generative-ai
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 3.9 | Audit sécurité dépendances | `npm audit` | Corriger vulnérabilités |
-| 3.10 | Vérifier échappement XSS | EJS avec `<%= %>` | EJS échappe automatiquement le HTML |
-| 3.11 | Vérifier injection SQL | Sequelize | Sequelize utilise des requêtes paramétrées |
-| 3.12 | Sécuriser les cookies | `express-session` config | `httpOnly: true`, `secure: true` en prod |
-| 3.13 | Valider toutes les entrées | `express-validator` / `joi` | Aucune donnée non validée |
-| 3.14 | Tester scénarios de sécurité | Manual testing | Tentatives d'injection, accès non autorisé |
-| 3.15 | Commit sécurité | `git commit -m "security: add input validation and secure cookies"` | |
+| 3.9 | Audit sécurité dépendances | `npm audit` | Corriger vulnérabilités | ✅ |
+| 3.10 | Vérifier échappement XSS | EJS avec `<%= %>` | EJS échappe automatiquement le HTML | ✅ |
+| 3.11 | Vérifier injection SQL | Sequelize | Sequelize utilise des requêtes paramétrées | ✅ |
+| 3.12 | Sécuriser les cookies | `express-session` config | `httpOnly: true`, `secure: true` en prod | ✅ |
+| 3.13 | Valider toutes les entrées | `express-validator` / `joi` | Aucune donnée non validée | ✅ |
+| 3.14 | Tester scénarios de sécurité | Manual testing | Tentatives d'injection, accès non autorisé | ✅ |
+| 3.15 | Commit sécurité | `git commit -m "security: add input validation and secure cookies"` | | ✅ |
 
 #### Semaine 3 - Jour 4 : SEO & Accessibilité (Simplifié)
 
@@ -426,13 +426,13 @@ npm install @google/generative-ai
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 3.16 | Ajouter balise `<title>` | Toutes les pages EJS | Titre unique par page (ex: "Ratatouille - Ciné Délices") |
-| 3.17 | Ajouter meta description | `<meta name="description">` | Description courte (max 160 caractères) |
-| 3.18 | Utiliser structure HTML sémantique | `<header>`, `<main>`, `<footer>`, `<article>` | Améliore le SEO et l'accessibilité |
-| 3.19 | Ajouter attributs alt aux images | Toutes les `<img>` | Description textuelle des images |
-| 3.20 | Tester avec Lighthouse | Chrome DevTools → Lighthouse | Score SEO et accessibilité |
-| 3.21 | Corriger problèmes identifiés | Selon rapport Lighthouse | Améliorer les scores |
-| 3.22 | Commit SEO | `git commit -m "feat(seo): add meta tags and semantic HTML"` | |
+| 3.16 | Ajouter balise `<title>` | Toutes les pages EJS | Titre unique par page (ex: "Ratatouille - Ciné Délices") | ✅ |
+| 3.17 | Ajouter meta description | `<meta name="description">` | Description courte (max 160 caractères) | ✅ |
+| 3.18 | Utiliser structure HTML sémantique | `<header>`, `<main>`, `<footer>`, `<article>` | Améliore le SEO et l'accessibilité | ✅ |
+| 3.19 | Ajouter attributs alt aux images | Toutes les `<img>` | Description textuelle des images | ✅ |
+| 3.20 | Tester avec Lighthouse | Chrome DevTools → Lighthouse | Score SEO et accessibilité | ✅ |
+| 3.21 | Corriger problèmes identifiés | Selon rapport Lighthouse | Améliorer les scores | ✅ |
+| 3.22 | Commit SEO | `git commit -m "feat(seo): add meta tags and semantic HTML"` | | ✅ |
 
 **Optionnel (bonus)** :
 - `robots.txt` : Fichier indiquant aux moteurs de recherche quelles pages indexer
@@ -455,21 +455,21 @@ npm install @google/generative-ai
 
 | # | Tâche | Action | Description |
 |---|-------|--------|-------------|
-| 3.35 | Créer workflow GitHub Actions | `.github/workflows/ci.yml` | Tests automatiques sur PR |
-| 3.36 | Créer workflow deploy | `.github/workflows/deploy.yml` | Build + deploy sur merge main |
-| 3.37 | Créer compte Azure | portal.azure.com | Crédits étudiants |
-| 3.38 | Créer Resource Group | Azure Portal | `rg-cinedelices` |
-| 3.39 | Créer Azure App Service | Azure Portal | Plan gratuit F1 (staging) |
-| 3.40 | Créer PostgreSQL Flexible | Azure Portal | Burstable B1ms |
-| 3.41 | Configurer variables d'env | App Service → Configuration | DATABASE_URL, secrets |
-| 3.42 | Obtenir publish profile | App Service → Download | Pour GitHub Actions |
-| 3.43 | Ajouter secrets GitHub | Settings → Secrets | AZURE_WEBAPP_PUBLISH_PROFILE |
-| 3.44 | Tester deploy staging | Push vers main | Vérifier déploiement auto |
-| 3.45 | Tester l'application déployée | URL Azure | Test complet |
-| 3.46 | Configurer domaine custom | Azure DNS (optionnel) | Nom de domaine |
-| 3.47 | Activer HTTPS | App Service → TLS/SSL | Certificat gratuit Azure |
-| 3.48 | Commit CI/CD | `git commit -m "ci: add GitHub Actions deployment workflow"` | |
-| 3.49 | Merge final vers main | PR review + merge | Déploiement production |
+| 3.35 | Créer workflow GitHub Actions | `.github/workflows/ci.yml` | Tests automatiques sur PR | ✅ |
+| 3.36 | Créer workflow deploy | `.github/workflows/deploy.yml` | Build + deploy sur merge main | 🔄 |
+| 3.37 | Créer compte Azure | portal.azure.com | Crédits étudiants | 🔄 |
+| 3.38 | Créer Resource Group | Azure Portal | `rg-cinedelices` | 🔄 |
+| 3.39 | Créer Azure App Service | Azure Portal | Plan gratuit F1 (staging) | 🔄 |
+| 3.40 | Créer PostgreSQL Flexible | Azure Portal | Burstable B1ms | 🔄 |
+| 3.41 | Configurer variables d'env | App Service → Configuration | DATABASE_URL, secrets | 🔄 |
+| 3.42 | Obtenir publish profile | App Service → Download | Pour GitHub Actions | 🔄 |
+| 3.43 | Ajouter secrets GitHub | Settings → Secrets | AZURE_WEBAPP_PUBLISH_PROFILE | 🔄 |
+| 3.44 | Tester deploy staging | Push vers main | Vérifier déploiement auto | 🔄 |
+| 3.45 | Tester l'application déployée | URL Azure | Test complet | 🔄 |
+| 3.46 | Configurer domaine custom | Azure DNS (optionnel) | Nom de domaine | 🔄 |
+| 3.47 | Activer HTTPS | App Service → TLS/SSL | Certificat gratuit Azure | 🔄 |
+| 3.48 | Commit CI/CD | `git commit -m "ci: add GitHub Actions deployment workflow"` | | 🔄 |
+| 3.49 | Merge final vers main | PR review + merge | Déploiement production | 🔄 |
 | 3.50 | **LIVRABLE SPRINT 3** | Application déployée en production | ✅ Site accessible en ligne |
 
 ---
