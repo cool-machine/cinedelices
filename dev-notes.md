@@ -40,7 +40,7 @@ Ciné Délices est un site web de recettes de cuisine inspirées du cinéma et d
 ### Évolutions Potentielles (Post-MVP)
 
 - Commentaires avec modération
-- Système de likes/notation
+- Système de likes/notation (Implémenté Sprint 2)
 - Gestion avancée des ingrédients
 - Filtres par ingrédient
 
@@ -368,7 +368,21 @@ npm install @google/generative-ai
 | 2.53 | Protéger toutes les routes | `isAdmin` middleware | Accès admin uniquement |
 | 2.54 | Tester back-office complet | Manual testing | Tous les CRUD |
 | 2.55 | Commit back-office | `git commit -m "feat(admin): add complete back-office"` | |
-| 2.56 | **LIVRABLE SPRINT 2** | MVP complet fonctionnel | ✅ Toutes fonctionnalités MVP |
+| 2.56 | **LIVRABLE SPRINT 2** | MVP complet fonctionnel | ✅ Toutes fonctionnalités MVP (SPA Reactored) |
+
+### 🔄 Sprint 2.5 : Refactorisation SPA (Architecture Moderne)
+
+**Objectif** : Transitionner d'une architecture MVC monolithique (EJS) vers une architecture SPA (Single Page Application) avec Svelte + API REST Express.
+
+| # | Tâche | Technologie | Description | Statut |
+|---|-------|-------------|-------------|--------|
+| 2.57 | Setup Frontend | Vite + Svelte | Initialisation projet frontend séparé | ✅ |
+| 2.58 | API Backend | Express REST | Transformation routes EJS en routes JSON | ✅ |
+| 2.59 | Authentification | JWT/Cookie | Auth basée sur cookies sécurisés (httpOnly) | ✅ |
+| 2.60 | Migration Pages | Svelte Components | Portage : Accueil, Catalogue, Détail, Auth | ✅ |
+| 2.61 | State Management | Svelte Stores | Gestion état utilisateur et UI globale | ✅ |
+| 2.62 | Design System | CSS Custom | Restauration thème Cinéma (Or/Noir) + Glassmorphism | ✅ |
+
 
 ---
 
@@ -475,9 +489,9 @@ npm install @google/generative-ai
 
 ```
 SPRINT 0 (Conception)     : ████████████████████ TERMINÉ
-SPRINT 1 (Setup)          : ░░░░░░░░░░░░░░░░░░░░ ~7 jours
-SPRINT 2 (Fonctionnalités): ░░░░░░░░░░░░░░░░░░░░ ~7 jours  
-SPRINT 3 (Finitions)      : ░░░░░░░░░░░░░░░░░░░░ ~7 jours
+SPRINT 1 (Setup)          : ████████████████████ TERMINÉ
+SPRINT 2 (Fonctionnalités): ████████████████████ TERMINÉ (Refactor SPA Inclus)
+SPRINT 3 (Finitions)      : ░░░░░░░░░░░░░░░░░░░░ EN COURS (Verification & Deployment)
 
 Total estimé: ~4 semaines de développement
 ```
