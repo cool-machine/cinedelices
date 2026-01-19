@@ -4,7 +4,7 @@ export const createRecipeSchema = [
     body('title').notEmpty().withMessage('Title is required').isString().isLength({ max: 255 }),
     body('ingredients').notEmpty().withMessage('Ingredients are required'),
     body('instructions').notEmpty().withMessage('Instructions are required'),
-    body('user_id').notEmpty().withMessage('Author ID is required').isInt(),
+    body('user_id').optional().isInt(),
     body('difficulty').optional().isIn(['facile', 'moyen', 'difficile']),
     body('prep_time').optional().isInt({ min: 0 }),
     body('cook_time').optional().isInt({ min: 0 }),

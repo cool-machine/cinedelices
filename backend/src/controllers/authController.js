@@ -2,7 +2,7 @@ import argon2 from 'argon2';
 import db from '../models/index.js';
 import { generateToken } from '../utils/jwt.js';
 
-const { User } = db;
+const { User, Recipe } = db;
 
 /**
  * Register a new user
@@ -70,4 +70,36 @@ export const login = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+};
+
+/**
+ * Get current authenticated user
+ */
+export const getMe = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id, {
+            attributes: { exclude: ['password_hash'] },
+            include: [{ model: Recipe, as: 'recipes' }]
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+/**
+ * Logout user (clear cookie)
+ */
+export const logout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
 };

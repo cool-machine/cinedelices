@@ -4,13 +4,6 @@ import db from '../models/index.js';
 const { Recipe } = db;
 
 /**
- * Check if request is for API (not a view route)
- */
-const isApiRequest = (req) => {
-    return req.originalUrl.startsWith('/api') || req.headers['content-type']?.includes('application/json');
-};
-
-/**
  * Middleware to check if user is authenticated via JWT (header or cookie)
  */
 export const isAuthenticated = (req, res, next) => {
@@ -29,22 +22,14 @@ export const isAuthenticated = (req, res, next) => {
         }
 
         if (!token) {
-            // For API routes, return 401
-            if (isApiRequest(req)) {
-                return res.status(401).json({ message: 'Authentication required' });
-            }
-            // For view routes, redirect to login
-            return res.redirect('/login');
+            return res.status(401).json({ message: 'Authentication required' });
         }
 
         const decoded = verifyToken(token);
         req.user = decoded;
         next();
     } catch {
-        if (isApiRequest(req)) {
-            return res.status(401).json({ message: 'Invalid or expired token' });
-        }
-        return res.redirect('/login');
+        return res.status(401).json({ message: 'Invalid or expired token' });
     }
 };
 
@@ -53,9 +38,6 @@ export const isAuthenticated = (req, res, next) => {
  */
 export const isAdmin = (req, res, next) => {
     if (!req.user || req.user.role !== 'admin') {
-        if (req.accepts('html')) {
-            return res.status(403).render('403', { title: 'Accès refusé' });
-        }
         return res.status(403).json({ message: 'Admin access required' });
     }
     next();
@@ -69,16 +51,10 @@ export const isRecipeAuthor = async (req, res, next) => {
         const recipe = await Recipe.findByPk(req.params.id);
 
         if (!recipe) {
-            if (req.accepts('html')) {
-                return res.status(404).render('404', { title: 'Recette introuvable' });
-            }
             return res.status(404).json({ message: 'Recipe not found' });
         }
 
         if (recipe.user_id !== req.user.id && req.user.role !== 'admin') {
-            if (req.accepts('html')) {
-                return res.status(403).render('403', { title: 'Accès refusé' });
-            }
             return res.status(403).json({ message: 'Not authorized' });
         }
 

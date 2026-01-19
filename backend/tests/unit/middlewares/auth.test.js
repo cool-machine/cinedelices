@@ -23,9 +23,7 @@ let authMiddleware;
 
 const buildRes = () => ({
     status: jest.fn().mockReturnThis(),
-    json: jest.fn(),
-    redirect: jest.fn(),
-    render: jest.fn()
+    json: jest.fn()
 });
 
 describe('Auth Middleware', () => {
@@ -39,8 +37,8 @@ describe('Auth Middleware', () => {
     });
 
     describe('isAuthenticated', () => {
-        it('should return 401 for API requests without token', () => {
-            const req = { originalUrl: '/api/v1/recipes', headers: {}, cookies: {} };
+        it('should return 401 for requests without token', () => {
+            const req = { headers: {}, cookies: {} };
             const res = buildRes();
             const next = jest.fn();
 
@@ -51,22 +49,10 @@ describe('Auth Middleware', () => {
             expect(next).not.toHaveBeenCalled();
         });
 
-        it('should redirect for view requests without token', () => {
-            const req = { originalUrl: '/recipes', headers: {}, cookies: {} };
-            const res = buildRes();
-            const next = jest.fn();
-
-            authMiddleware.isAuthenticated(req, res, next);
-
-            expect(res.redirect).toHaveBeenCalledWith('/login');
-            expect(next).not.toHaveBeenCalled();
-        });
-
         it('should accept Bearer token and set req.user', () => {
             verifyToken.mockReturnValue({ id: 1, role: 'user' });
 
             const req = {
-                originalUrl: '/api/v1/recipes',
                 headers: { authorization: 'Bearer token' },
                 cookies: {}
             };
@@ -84,7 +70,6 @@ describe('Auth Middleware', () => {
             verifyToken.mockReturnValue({ id: 2, role: 'user' });
 
             const req = {
-                originalUrl: '/recipes',
                 headers: {},
                 cookies: { token: 'cookie-token' }
             };
@@ -98,13 +83,12 @@ describe('Auth Middleware', () => {
             expect(next).toHaveBeenCalled();
         });
 
-        it('should return 401 for API requests with invalid token', () => {
+        it('should return 401 for requests with invalid token', () => {
             verifyToken.mockImplementation(() => {
                 throw new Error('invalid');
             });
 
             const req = {
-                originalUrl: '/api/v1/recipes',
                 headers: { authorization: 'Bearer bad-token' },
                 cookies: {}
             };
@@ -117,42 +101,11 @@ describe('Auth Middleware', () => {
             expect(res.json).toHaveBeenCalledWith({ message: 'Invalid or expired token' });
             expect(next).not.toHaveBeenCalled();
         });
-
-        it('should redirect for view requests with invalid token', () => {
-            verifyToken.mockImplementation(() => {
-                throw new Error('invalid');
-            });
-
-            const req = {
-                originalUrl: '/recipes',
-                headers: { authorization: 'Bearer bad-token' },
-                cookies: {}
-            };
-            const res = buildRes();
-            const next = jest.fn();
-
-            authMiddleware.isAuthenticated(req, res, next);
-
-            expect(res.redirect).toHaveBeenCalledWith('/login');
-            expect(next).not.toHaveBeenCalled();
-        });
     });
 
     describe('isAdmin', () => {
-        it('should render 403 page for non-admin users', () => {
-            const req = { user: { role: 'user' }, accepts: jest.fn().mockReturnValue(true) };
-            const res = buildRes();
-            const next = jest.fn();
-
-            authMiddleware.isAdmin(req, res, next);
-
-            expect(res.status).toHaveBeenCalledWith(403);
-            expect(res.render).toHaveBeenCalledWith('403', { title: 'Accès refusé' });
-            expect(next).not.toHaveBeenCalled();
-        });
-
-        it('should return 403 JSON for non-admin API requests', () => {
-            const req = { user: { role: 'user' }, accepts: jest.fn().mockReturnValue(false) };
+        it('should return 403 for non-admin users', () => {
+            const req = { user: { role: 'user' } };
             const res = buildRes();
             const next = jest.fn();
 
@@ -175,31 +128,12 @@ describe('Auth Middleware', () => {
     });
 
     describe('isRecipeAuthor', () => {
-        it('should render 404 page when recipe missing', async () => {
+        it('should return 404 when recipe not found', async () => {
             recipeFindByPk.mockResolvedValue(null);
 
             const req = {
                 params: { id: 1 },
-                user: { id: 1, role: 'user' },
-                accepts: jest.fn().mockReturnValue(true)
-            };
-            const res = buildRes();
-            const next = jest.fn();
-
-            await authMiddleware.isRecipeAuthor(req, res, next);
-
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.render).toHaveBeenCalledWith('404', { title: 'Recette introuvable' });
-            expect(next).not.toHaveBeenCalled();
-        });
-
-        it('should return 404 JSON when recipe missing for API', async () => {
-            recipeFindByPk.mockResolvedValue(null);
-
-            const req = {
-                params: { id: 1 },
-                user: { id: 1, role: 'user' },
-                accepts: jest.fn().mockReturnValue(false)
+                user: { id: 1, role: 'user' }
             };
             const res = buildRes();
             const next = jest.fn();
@@ -211,31 +145,12 @@ describe('Auth Middleware', () => {
             expect(next).not.toHaveBeenCalled();
         });
 
-        it('should render 403 page when user is not author', async () => {
+        it('should return 403 when user is not author', async () => {
             recipeFindByPk.mockResolvedValue({ id: 1, user_id: 2 });
 
             const req = {
                 params: { id: 1 },
-                user: { id: 1, role: 'user' },
-                accepts: jest.fn().mockReturnValue(true)
-            };
-            const res = buildRes();
-            const next = jest.fn();
-
-            await authMiddleware.isRecipeAuthor(req, res, next);
-
-            expect(res.status).toHaveBeenCalledWith(403);
-            expect(res.render).toHaveBeenCalledWith('403', { title: 'Accès refusé' });
-            expect(next).not.toHaveBeenCalled();
-        });
-
-        it('should return 403 JSON when user is not author for API', async () => {
-            recipeFindByPk.mockResolvedValue({ id: 1, user_id: 2 });
-
-            const req = {
-                params: { id: 1 },
-                user: { id: 1, role: 'user' },
-                accepts: jest.fn().mockReturnValue(false)
+                user: { id: 1, role: 'user' }
             };
             const res = buildRes();
             const next = jest.fn();
@@ -253,8 +168,7 @@ describe('Auth Middleware', () => {
 
             const req = {
                 params: { id: 1 },
-                user: { id: 1, role: 'user' },
-                accepts: jest.fn().mockReturnValue(true)
+                user: { id: 1, role: 'user' }
             };
             const res = buildRes();
             const next = jest.fn();
@@ -265,13 +179,29 @@ describe('Auth Middleware', () => {
             expect(next).toHaveBeenCalled();
         });
 
-        it('should return 500 JSON on errors', async () => {
+        it('should allow admin to access any recipe', async () => {
+            const recipe = { id: 1, user_id: 2 };
+            recipeFindByPk.mockResolvedValue(recipe);
+
+            const req = {
+                params: { id: 1 },
+                user: { id: 1, role: 'admin' }
+            };
+            const res = buildRes();
+            const next = jest.fn();
+
+            await authMiddleware.isRecipeAuthor(req, res, next);
+
+            expect(req.recipe).toBe(recipe);
+            expect(next).toHaveBeenCalled();
+        });
+
+        it('should return 500 on database errors', async () => {
             recipeFindByPk.mockRejectedValue(new Error('DB error'));
 
             const req = {
                 params: { id: 1 },
-                user: { id: 1, role: 'user' },
-                accepts: jest.fn().mockReturnValue(false)
+                user: { id: 1, role: 'user' }
             };
             const res = buildRes();
             const next = jest.fn();

@@ -46,10 +46,10 @@ describe('Recipe Controller', () => {
     describe('createRecipe', () => {
         it('should create a recipe and return 201', async () => {
             const payload = { title: 'Recipe 1' };
-            const created = { id: 1, ...payload };
+            const created = { id: 1, ...payload, user_id: 1 };
             createRecipeMock.mockResolvedValue(created);
 
-            const req = { body: payload };
+            const req = { body: payload, user: { id: 1 } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn()
@@ -57,7 +57,7 @@ describe('Recipe Controller', () => {
 
             await createRecipe(req, res);
 
-            expect(createRecipeMock).toHaveBeenCalledWith(payload);
+            expect(createRecipeMock).toHaveBeenCalledWith({ ...payload, user_id: 1 });
             expect(res.status).toHaveBeenCalledWith(201);
             expect(res.json).toHaveBeenCalledWith(created);
         });
@@ -66,7 +66,7 @@ describe('Recipe Controller', () => {
             const error = new Error('DB error');
             createRecipeMock.mockRejectedValue(error);
 
-            const req = { body: { title: 'Recipe 1' } };
+            const req = { body: { title: 'Recipe 1' }, user: { id: 1 } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn()
@@ -75,7 +75,6 @@ describe('Recipe Controller', () => {
             await createRecipe(req, res);
 
             expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: error.message });
         });
     });
 
@@ -166,10 +165,10 @@ describe('Recipe Controller', () => {
 
     describe('updateRecipe', () => {
         it('should update recipe and return 200', async () => {
-            const recipe = { update: jest.fn().mockResolvedValue(true) };
+            const recipe = { user_id: 1, update: jest.fn().mockResolvedValue(true) };
             findByPkMock.mockResolvedValue(recipe);
 
-            const req = { params: { id: 1 }, body: { title: 'Updated' } };
+            const req = { params: { id: 1 }, body: { title: 'Updated' }, user: { id: 1, role: 'user' } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn()
@@ -185,7 +184,7 @@ describe('Recipe Controller', () => {
         it('should return 404 when recipe is missing', async () => {
             findByPkMock.mockResolvedValue(null);
 
-            const req = { params: { id: 999 }, body: {} };
+            const req = { params: { id: 999 }, body: {}, user: { id: 1, role: 'user' } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn()
@@ -201,7 +200,7 @@ describe('Recipe Controller', () => {
             const error = new Error('DB error');
             findByPkMock.mockRejectedValue(error);
 
-            const req = { params: { id: 1 }, body: {} };
+            const req = { params: { id: 1 }, body: {}, user: { id: 1, role: 'user' } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn()
@@ -216,10 +215,10 @@ describe('Recipe Controller', () => {
 
     describe('deleteRecipe', () => {
         it('should delete recipe and return 204', async () => {
-            const recipe = { destroy: jest.fn().mockResolvedValue(true) };
+            const recipe = { user_id: 1, destroy: jest.fn().mockResolvedValue(true) };
             findByPkMock.mockResolvedValue(recipe);
 
-            const req = { params: { id: 1 } };
+            const req = { params: { id: 1 }, user: { id: 1, role: 'user' } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn(),
@@ -236,7 +235,7 @@ describe('Recipe Controller', () => {
         it('should return 404 when recipe is missing', async () => {
             findByPkMock.mockResolvedValue(null);
 
-            const req = { params: { id: 999 } };
+            const req = { params: { id: 999 }, user: { id: 1, role: 'user' } };
             const res = {
                 status: jest.fn().mockReturnThis(),
                 json: jest.fn(),

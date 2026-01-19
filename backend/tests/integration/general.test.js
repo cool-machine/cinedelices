@@ -1,6 +1,6 @@
 /**
- * Main Integration Tests
- * Testing the Express app routes
+ * General API Tests
+ * Testing basic Express app routes
  */
 
 import request from 'supertest';
@@ -12,22 +12,21 @@ describe('General API Routes', () => {
             const res = await request(app).get('/health');
             expect(res.statusCode).toEqual(200);
             expect(res.body).toHaveProperty('status', 'OK');
-        });
-    });
-
-    describe('GET /', () => {
-        it('should return homepage content', async () => {
-            const res = await request(app).get('/');
-            expect(res.statusCode).toEqual(200);
-            // Either shows recipes or the empty message
-            expect(res.text).toMatch(/recette|Aucune recette/i);
+            expect(res.body).toHaveProperty('message', 'CinéDélices API is running');
         });
     });
 
     describe('404 Handling', () => {
-        it('should return 404 for non-existent routes', async () => {
+        it('should return 404 JSON for non-existent API routes', async () => {
             const res = await request(app).get('/api/v1/non-existent');
             expect(res.statusCode).toEqual(404);
+            expect(res.body).toHaveProperty('message', 'Not found');
+        });
+
+        it('should return 404 JSON for non-existent root routes', async () => {
+            const res = await request(app).get('/non-existent-page');
+            expect(res.statusCode).toEqual(404);
+            expect(res.body).toHaveProperty('message', 'Not found');
         });
     });
 });
