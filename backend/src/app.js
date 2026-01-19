@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -79,8 +80,25 @@ app.get('/health', (req, res) => {
 });
 
 // 404 Handler for API
-app.use((req, res) => {
+// API 404
+app.use('/api/*', (req, res) => {
     res.status(404).json({ message: 'Not found' });
 });
+
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+    const __dirname = path.resolve();
+    // Assuming the build output is moved to backend/public during deployment
+    app.use(express.static(path.join(__dirname, 'public')));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+} else {
+    // Development default route
+    app.get('/', (req, res) => {
+        res.json({ message: 'Ciné Délices API Running' });
+    });
+}
 
 export default app;
