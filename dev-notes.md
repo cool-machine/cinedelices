@@ -274,15 +274,15 @@ mkdir -p docker
 
 | # | Tâche | Fichier | Description |
 |---|-------|---------|-------------|
-| 2.44b | Créer variable d'environnement | `.env` | `GEMINI_API_KEY`, `AI_ENABLED=true` | ✅ |
-| 2.45b | Ajouter bouton "Suggérer avec l'IA" | `recipe-form.ejs` | Bouton affiché uniquement si média sélectionné | ✅ |
-| 2.46b | Créer service IA | `src/services/aiRecipeService.js` | Appel API Gemini pour génération | ✅ |
-| 2.47b | Créer endpoint génération | `recipeController.generateFromMedia()` | Route POST `/api/recipes/generate` | ✅ |
-| 2.48b | Implémenter prompt template | `aiRecipeService.js` | Template structuré film → JSON recette | ✅ |
-| 2.49b | Ajouter gestion front-end | `public/js/recipe-form.js` | Fetch API, loading state, pré-remplissage | ✅ |
-| 2.50b | Gestion des erreurs | Frontend + Backend | Timeout, rate limit, fallback manuel | ✅ |
-| 2.51b | Tester scénario complet | Manual testing | Sélection → Génération → Édition → Soumission | ✅ |
-| 2.52b | Commit feature IA | Git | `feat(ai): add AI-assisted recipe generation` | ✅ |
+| 2.44b | Créer variable d'environnement | `.env` | `GEMINI_API_KEY`, `AI_ENABLED=true` | 🚫 |
+| 2.45b | Ajouter bouton "Suggérer avec l'IA" | `recipe-form.ejs` | Bouton affiché uniquement si média sélectionné | 🚫 |
+| 2.46b | Créer service IA | `src/services/aiRecipeService.js` | Appel API Gemini pour génération | 🚫 |
+| 2.47b | Créer endpoint génération | `recipeController.generateFromMedia()` | Route POST `/api/recipes/generate` | 🚫 |
+| 2.48b | Implémenter prompt template | `aiRecipeService.js` | Template structuré film → JSON recette | 🚫 |
+| 2.49b | Ajouter gestion front-end | `public/js/recipe-form.js` | Fetch API, loading state, pré-remplissage | 🚫 |
+| 2.50b | Gestion des erreurs | Frontend + Backend | Timeout, rate limit, fallback manuel | 🚫 |
+| 2.51b | Tester scénario complet | Manual testing | Sélection → Génération → Édition → Soumission | 🚫 |
+| 2.52b | Commit feature IA | Git | `feat(ai): add AI-assisted recipe generation` | 🚫 |
 
 **Choix Technique :**
 
