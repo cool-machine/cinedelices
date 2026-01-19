@@ -21,6 +21,7 @@ jest.setTimeout(30000);
 // Global beforeAll - runs once before all test files
 globalThis.beforeAll(async () => {
     console.log('🧪 Starting tests...');
+    await import('../src/config/config.js');
 });
 
 // Global afterAll - runs once after all test files

@@ -118,6 +118,21 @@ describe('View Controller', () => {
                 recipes: [{ id: 2, title: 'Latest' }]
             });
         });
+
+        it('should render 500 on error', async () => {
+            recipeFindOne.mockRejectedValue(new Error('DB error'));
+
+            const req = {};
+            const res = buildRes();
+
+            await viewController.getHomePage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
     });
 
     describe('getRecipesPage', () => {
@@ -146,6 +161,21 @@ describe('View Controller', () => {
                 selectedMedia: '2'
             });
         });
+
+        it('should render 500 on error', async () => {
+            recipeFindAll.mockRejectedValue(new Error('DB error'));
+
+            const req = { query: {} };
+            const res = buildRes();
+
+            await viewController.getRecipesPage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
     });
 
     describe('getRecipeDetailPage', () => {
@@ -159,6 +189,29 @@ describe('View Controller', () => {
 
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.render).toHaveBeenCalledWith('404', { title: 'Recette introuvable' });
+        });
+
+        it('should render recipe detail with no ratings', async () => {
+            const recipe = {
+                id: 1,
+                title: 'Recipe',
+                ratings: null
+            };
+            recipeFindByPk.mockResolvedValue(recipe);
+
+            const req = { params: { id: 1 } };
+            const res = buildRes();
+
+            await viewController.getRecipeDetailPage(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('recipes/show', {
+                title: 'Recipe - CinéDélices',
+                recipe,
+                averageRating: 0,
+                userRating: null,
+                ratingCount: 0,
+                isFavorited: false
+            });
         });
 
         it('should render recipe detail with rating and favorite', async () => {
@@ -187,6 +240,43 @@ describe('View Controller', () => {
                 isFavorited: true
             });
         });
+
+        it('should render 500 on error', async () => {
+            recipeFindByPk.mockRejectedValue(new Error('DB error'));
+
+            const req = { params: { id: 1 } };
+            const res = buildRes();
+
+            await viewController.getRecipeDetailPage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('getLoginPage', () => {
+        it('should render login page', () => {
+            const req = {};
+            const res = buildRes();
+
+            viewController.getLoginPage(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('auth/login', { title: 'Connexion - CinéDélices' });
+        });
+    });
+
+    describe('getRegisterPage', () => {
+        it('should render register page', () => {
+            const req = {};
+            const res = buildRes();
+
+            viewController.getRegisterPage(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('auth/register', { title: 'Inscription - CinéDélices' });
+        });
     });
 
     describe('handleLogin', () => {
@@ -194,6 +284,22 @@ describe('View Controller', () => {
             userFindOne.mockResolvedValue(null);
 
             const req = { body: { email: 'test@test.com', password: 'pass' } };
+            const res = buildRes();
+
+            await viewController.handleLogin(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('auth/login', {
+                title: 'Connexion - CinéDélices',
+                error: 'Email ou mot de passe incorrect'
+            });
+        });
+
+        it('should render error when password is invalid', async () => {
+            const user = { id: 1, email: 'a@a.com', role: 'user', password_hash: 'hash' };
+            userFindOne.mockResolvedValue(user);
+            argonVerify.mockResolvedValue(false);
+
+            const req = { body: { email: 'a@a.com', password: 'pass' } };
             const res = buildRes();
 
             await viewController.handleLogin(req, res);
@@ -215,8 +321,27 @@ describe('View Controller', () => {
 
             await viewController.handleLogin(req, res);
 
-            expect(res.cookie).toHaveBeenCalledWith('token', 'token', expect.any(Object));
+            expect(res.cookie).toHaveBeenCalledWith('token', 'token', expect.objectContaining({
+                httpOnly: true,
+                sameSite: 'lax',
+                secure: false,
+                maxAge: 24 * 60 * 60 * 1000
+            }));
             expect(res.redirect).toHaveBeenCalledWith('/profile/edit');
+        });
+
+        it('should render generic error on exception', async () => {
+            userFindOne.mockRejectedValue(new Error('DB error'));
+
+            const req = { body: { email: 'a@a.com', password: 'pass' } };
+            const res = buildRes();
+
+            await viewController.handleLogin(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('auth/login', {
+                title: 'Connexion - CinéDélices',
+                error: 'Une erreur est survenue'
+            });
         });
     });
 
@@ -246,6 +371,250 @@ describe('View Controller', () => {
 
             expect(userCreate).toHaveBeenCalledWith({ username: 'u', email: 'a@a.com', password_hash: 'hash' });
             expect(res.redirect).toHaveBeenCalledWith('/login');
+        });
+
+        it('should render generic error on exception', async () => {
+            userFindOne.mockRejectedValue(new Error('DB error'));
+
+            const req = { body: { username: 'u', email: 'a@a.com', password: 'pass' } };
+            const res = buildRes();
+
+            await viewController.handleRegister(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('auth/register', {
+                title: 'Inscription - CinéDélices',
+                error: 'Une erreur est survenue'
+            });
+        });
+    });
+
+    describe('handleLogout', () => {
+        it('should clear cookie and redirect', () => {
+            const req = {};
+            const res = buildRes();
+
+            viewController.handleLogout(req, res);
+
+            expect(res.clearCookie).toHaveBeenCalledWith('token', {
+                httpOnly: true,
+                sameSite: 'lax',
+                secure: false
+            });
+            expect(res.redirect).toHaveBeenCalledWith('/');
+        });
+    });
+
+    describe('getNewRecipePage', () => {
+        it('should render 500 on error', async () => {
+            categoryFindAll.mockRejectedValue(new Error('DB error'));
+
+            const req = {};
+            const res = buildRes();
+
+            await viewController.getNewRecipePage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('createRecipe', () => {
+        it('should render new recipe page on error', async () => {
+            recipeCreate.mockRejectedValue(new Error('DB error'));
+            categoryFindAll.mockResolvedValue([{ id: 1 }]);
+            mediaFindAll.mockResolvedValue([{ id: 2 }]);
+
+            const req = {
+                body: { title: 'Recipe', ingredients: 'A', instructions: 'B' },
+                user: { id: 1 }
+            };
+            const res = buildRes();
+
+            await viewController.createRecipe(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('recipes/new', {
+                title: 'Créer une Recette - CinéDélices',
+                categories: [{ id: 1 }],
+                mediaList: [{ id: 2 }],
+                error: 'Erreur lors de la création'
+            });
+        });
+    });
+
+    describe('getEditRecipePage', () => {
+        it('should render 500 on error', async () => {
+            categoryFindAll.mockRejectedValue(new Error('DB error'));
+
+            const req = { recipe: { id: 1, title: 'Recipe' } };
+            const res = buildRes();
+
+            await viewController.getEditRecipePage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('updateRecipe', () => {
+        it('should update recipe and redirect', async () => {
+            const recipe = { id: 1, update: jest.fn().mockResolvedValue() };
+
+            const req = {
+                recipe,
+                body: {
+                    title: 'Title',
+                    description: 'Desc',
+                    ingredients: 'Ing',
+                    instructions: 'Inst',
+                    category_id: '',
+                    media_id: '',
+                    difficulty: '',
+                    prep_time: 5,
+                    cook_time: 10,
+                    image_url: 'img.jpg'
+                }
+            };
+            const res = buildRes();
+
+            await viewController.updateRecipe(req, res);
+
+            expect(recipe.update).toHaveBeenCalledWith({
+                title: 'Title',
+                description: 'Desc',
+                ingredients: 'Ing',
+                instructions: 'Inst',
+                category_id: null,
+                media_id: null,
+                difficulty: 'moyen',
+                prep_time: 5,
+                cook_time: 10,
+                image_url: 'img.jpg'
+            });
+            expect(res.redirect).toHaveBeenCalledWith('/recipes/1');
+        });
+
+        it('should render 500 on error', async () => {
+            const recipe = { update: jest.fn().mockRejectedValue(new Error('DB error')) };
+
+            const req = { recipe, body: {} };
+            const res = buildRes();
+
+            await viewController.updateRecipe(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('deleteRecipe', () => {
+        it('should render 500 on error', async () => {
+            const recipe = { destroy: jest.fn().mockRejectedValue(new Error('DB error')) };
+
+            const req = { recipe };
+            const res = buildRes();
+
+            await viewController.deleteRecipe(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('getProfilePage', () => {
+        it('should render 500 on error', async () => {
+            userFindByPk.mockRejectedValue(new Error('DB error'));
+
+            const req = { params: { id: 1 } };
+            const res = buildRes();
+
+            await viewController.getProfilePage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('getEditProfilePage', () => {
+        it('should render 500 on error', async () => {
+            userFindByPk.mockRejectedValue(new Error('DB error'));
+
+            const req = { user: { id: 1 } };
+            const res = buildRes();
+
+            await viewController.getEditProfilePage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('updateProfile', () => {
+        it('should render edit page with error on exception', async () => {
+            const user = { id: 1, update: jest.fn().mockRejectedValue(new Error('DB error')) };
+            userFindByPk.mockResolvedValue(user);
+
+            const req = { user: { id: 1 }, body: { username: 'u' } };
+            const res = buildRes();
+
+            await viewController.updateProfile(req, res);
+
+            expect(res.render).toHaveBeenCalledWith('profile/edit', {
+                title: 'Modifier mon profil - CinéDélices',
+                user,
+                error: 'Erreur lors de la mise à jour'
+            });
+        });
+    });
+
+    describe('rateRecipe', () => {
+        it('should render 500 on error', async () => {
+            ratingFindOrCreate.mockRejectedValue(new Error('DB error'));
+
+            const req = { user: { id: 1 }, params: { id: 1 }, body: { stars: 5 } };
+            const res = buildRes();
+
+            await viewController.rateRecipe(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
+    });
+
+    describe('createReview', () => {
+        it('should render 500 on error', async () => {
+            reviewCreate.mockRejectedValue(new Error('DB error'));
+
+            const req = { user: { id: 1 }, params: { id: 1 }, body: { content: 'Nice' } };
+            const res = buildRes();
+
+            await viewController.createReview(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
         });
     });
 
@@ -296,6 +665,21 @@ describe('View Controller', () => {
             expect(favoriteCreate).toHaveBeenCalledWith({ user_id: 1, recipe_id: 1 });
             expect(res.redirect).toHaveBeenCalledWith('/recipes/1');
         });
+
+        it('should render 500 on error', async () => {
+            recipeFindByPk.mockRejectedValue(new Error('DB error'));
+
+            const req = { params: { id: 1 }, user: { id: 1 } };
+            const res = buildRes();
+
+            await viewController.toggleFavorite(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
+            });
+        });
     });
 
     describe('getFavoritesPage', () => {
@@ -312,6 +696,21 @@ describe('View Controller', () => {
             expect(res.render).toHaveBeenCalledWith('favorites/index', {
                 title: 'Mes Favoris - CinéDélices',
                 recipes: [{ id: 1, title: 'Recipe' }]
+            });
+        });
+
+        it('should render 500 on error', async () => {
+            favoriteFindAll.mockRejectedValue(new Error('DB error'));
+
+            const req = { user: { id: 1 } };
+            const res = buildRes();
+
+            await viewController.getFavoritesPage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.render).toHaveBeenCalledWith('500', {
+                title: 'Erreur Serveur',
+                error: 'DB error'
             });
         });
     });

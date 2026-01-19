@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-export default {
+export const buildConfig = () => ({
     development: {
         url: process.env.DATABASE_URL,
         dialect: 'postgres',
@@ -40,4 +40,8 @@ export default {
             updatedAt: 'updated_at'
         }
     }
-};
+});
+
+const config = buildConfig();
+
+export default config;

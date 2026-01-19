@@ -154,10 +154,10 @@ mkdir -p docker
 |---|-------|---------|---------|
 | 1.41 | Créer le serveur principal | `server.js` | Express app, middlewares, port |
 | 1.42 | Créer le router principal | `src/routes/index.js` | Import de tous les routers |
-| 1.43 | Créer les routes recettes | `src/routes/recipeRoutes.js` | GET /recipes, GET /recipes/:id, POST /recipes |
-| 1.44 | Créer les routes auth | `src/routes/authRoutes.js` | POST /login, POST /register, POST /logout |
-| 1.45 | Créer les routes utilisateur | `src/routes/userRoutes.js` | GET /profile, PUT /profile |
-| 1.46 | Créer les routes admin | `src/routes/adminRoutes.js` | CRUD recettes/users/categories |
+| 1.43 | Créer les routes recettes (API) | `src/routes/recipeRoutes.js` | GET /recipes, GET /recipes/:id, POST /recipes |
+| 1.44 | Créer les routes auth (API) | `src/routes/authRoutes.js` | POST /login, POST /register |
+| 1.45 | Créer les routes vues | `src/routes/viewRoutes.js` | Pages publiques + profils |
+| 1.46 | Créer les routes admin (views) | `src/routes/viewRoutes.js` | CRUD admin côté pages |
 | 1.47 | Créer middleware auth | `src/middlewares/authMiddleware.js` | isAuthenticated, isAdmin |
 | 1.48 | Créer middleware erreurs | `src/middlewares/errorHandler.js` | Gestion des erreurs globale |
 | 1.49 | Tester le serveur | `npm run dev` → `http://localhost:3000` | Serveur fonctionnel |
@@ -602,9 +602,8 @@ cinedelices/
 │   ├── 📁 routes/
 │   │   ├── 📄 index.js
 │   │   ├── 📄 recipeRoutes.js
-│   │   ├── 📄 userRoutes.js
 │   │   ├── 📄 authRoutes.js
-│   │   └── 📄 adminRoutes.js
+│   │   └── 📄 viewRoutes.js
 │   ├── 📁 middlewares/
 │   │   ├── 📄 authMiddleware.js
 │   │   ├── 📄 errorHandler.js
@@ -634,6 +633,20 @@ cinedelices/
 ├── 📄 README.md
 └── 📄 server.js
 ```
+
+### 🔀 Organisation des routes (actuel)
+
+- **`src/app.js`**
+  - Monte **API** : `app.use('/api/v1', router)` → `src/routes/index.js`
+  - Monte **Views** : `app.use('/', viewRoutes)` → `src/routes/viewRoutes.js`
+- **`src/routes/index.js` (API)**
+  - `/recipes` → `recipeRoutes.js`
+  - `/auth` → `authRoutes.js`
+  - `/categories`, `/media` → `metadataController`
+- **`src/routes/viewRoutes.js` (Pages + Admin)**
+  - Pages publiques + profils (`/`, `/recipes`, `/profile/...`)
+  - Auth pages (`/login`, `/register`, `/logout`)
+  - **Admin** (`/admin/*`) avec `isAuthenticated` + `isAdmin`
 
 ---
 

@@ -170,7 +170,12 @@ export const handleLogin = async (req, res) => {
 
         // Create JWT token and set as cookie
         const token = generateToken({ id: user.id, email: user.email, role: user.role });
-        res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 24h
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000
+        }); // 24h
 
         if (!user.avatar_url && !user.bio) {
             return res.redirect('/profile/edit');
@@ -213,7 +218,11 @@ export const handleRegister = async (req, res) => {
 };
 
 export const handleLogout = (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+    });
     res.redirect('/');
 };
 

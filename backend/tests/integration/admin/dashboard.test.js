@@ -38,6 +38,15 @@ describe('Admin Dashboard', () => {
             expect(res.headers.location).toContain('/login');
         });
 
+        it('should redirect when token is invalid', async () => {
+            const res = await request(app)
+                .get('/admin')
+                .set('Cookie', ['token=invalid']);
+
+            expect(res.statusCode).toEqual(302);
+            expect(res.headers.location).toContain('/login');
+        });
+
         it('should render 403 page for non-admin users', async () => {
             const user = await createTestUser(User, {
                 email: 'user@test.com',

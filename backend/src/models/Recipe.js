@@ -111,7 +111,9 @@ export default (sequelize, DataTypes) => {
             references: {
                 model: 'users',
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         },
         category_id: {
             type: DataTypes.INTEGER,

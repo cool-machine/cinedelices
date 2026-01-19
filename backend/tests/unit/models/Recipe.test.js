@@ -242,7 +242,6 @@ describe('Recipe Model', () => {
     });
 
     describe('Cascade Delete', () => {
-        // TODO: Fix migration to properly cascade delete - currently constraint blocks it
         it('should delete recipes when user is deleted', async () => {
             const deleteTestUser = await User.create({
                 email: `deletetest${Date.now()}@test.com`,
