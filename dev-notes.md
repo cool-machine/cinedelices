@@ -1208,7 +1208,36 @@ erDiagram
 | TBD | Backend | API, BDD, Auth |
 | TBD | DevOps | Docker, CI/CD, Déploiement |
 
+
 ---
 
-*Document mis à jour le : 16 janvier 2026*
-*Version : 1.0.0*
+## 🎬 Feature Tracking: Recherche de Films & Séries (TMDB integration)
+
+**Implémenté en :** Janvier 2026 (Sprint 2 Extension)
+
+### Objectifs
+- Permettre aux utilisateurs de rechercher un film ou une série via l'API TMDB.
+- Sélectionner un média pour créer une recette associée.
+- Pré-remplir le formulaire de création de recette avec les données du média.
+
+### Architecture Technique
+- **Backend** : 
+  - `tmdbService.js` : Wrapper pour l'API TMDB.
+  - `tmdbRoutes.js` : Endpoints `/search` et `/:id`.
+  - `metadataController.js` : Ajout de `createMedia` pour l'enregistrement automatique.
+- **Frontend** :
+  - `MovieSearch.svelte` : Page de recherche.
+  - `RecipeFromMovie.svelte` : Page intermédiaire (Choix AI vs Manuel).
+  - `RecipeNew.svelte` : Mise à jour pour accepter les paramètres `prefill_movie`.
+
+### Statut
+- [x] Backend Routes (Search, Details, Post Media)
+- [x] Frontend UI (Search Page, Choice Page)
+- [x] Auth Protection
+- [x] Auto-fill & Media Auto-creation
+- [ ] AI Generation (Placeholder "Coming Soon")
+
+---
+
+*Document mis à jour le : 19 janvier 2026*
+*Version : 1.1.0*

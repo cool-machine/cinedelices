@@ -1,35 +1,86 @@
 <script>
-    import { onMount } from 'svelte';
-    import { push } from 'svelte-spa-router';
-    import { api } from '../lib/api.js';
-    import { auth } from '../lib/stores/auth.js';
+    import { onMount } from "svelte";
+    import { push, querystring } from "svelte-spa-router";
+    import { api } from "../lib/api.js";
+    import { auth } from "../lib/stores/auth.js";
 
     let categories = [];
     let media = [];
     let loading = false;
     let error = null;
 
+    let prefilledMovie = null;
+
     let form = {
-        title: '',
-        description: '',
-        ingredients: '',
-        instructions: '',
-        image_url: '',
-        category_id: '',
-        media_id: ''
+        title: "",
+        description: "",
+        ingredients: "",
+        instructions: "",
+        image_url: "",
+        category_id: "",
+        media_id: "",
     };
 
     onMount(async () => {
         if (!$auth.user) {
-            push('/login');
+            push("/login");
             return;
         }
 
         try {
+            const params = new URLSearchParams($querystring);
+            const prefill = params.get("prefill_movie");
+
+            if (prefill === "true") {
+                prefilledMovie = {
+                    title: params.get("movie_title"),
+                    poster_url: params.get("movie_poster"),
+                    year: params.get("movie_year"),
+                    type: params.get("movie_type"),
+                };
+
+                // Pre-fill form title with the movie title if available
+                if (prefilledMovie.title) {
+                    form.title = prefilledMovie.title; // Default recipe title to movie name
+                }
+            }
+
             [categories, media] = await Promise.all([
                 api.getCategories(),
-                api.getMedia()
+                api.getMedia(),
             ]);
+
+            // If we have a prefilled movie, try to find it in the media list
+            if (prefilledMovie && prefilledMovie.title) {
+                const existingMedia = media.find(
+                    (m) =>
+                        m.title.toLowerCase() ===
+                        prefilledMovie.title.toLowerCase(),
+                );
+
+                if (existingMedia) {
+                    form.media_id = existingMedia.id;
+                } else {
+                    // Create the media automatically if it doesn't exist
+                    // Note: In a real app we might want to ask user confirmation
+                    // For now we'll just set it aside or handle it at submission
+                    // Or we could auto-create it right now:
+                    try {
+                        const newMedia = await api.createMedia({
+                            title: prefilledMovie.title,
+                            type: prefilledMovie.type || "film",
+                            release_year:
+                                parseInt(prefilledMovie.year) ||
+                                new Date().getFullYear(),
+                            tmdb_id: null, // We don't strictly need this for now
+                        });
+                        media = [...media, newMedia];
+                        form.media_id = newMedia.id;
+                    } catch (err) {
+                        console.error("Auto-creation of media failed", err);
+                    }
+                }
+            }
         } catch (e) {
             error = e.message;
         }
@@ -44,7 +95,7 @@
                 ...form,
                 user_id: $auth.user.id,
                 category_id: form.category_id || null,
-                media_id: form.media_id || null
+                media_id: form.media_id || null,
             };
             const recipe = await api.createRecipe(data);
             push(`/recipes/${recipe.id}`);
@@ -66,11 +117,11 @@
     <form on:submit|preventDefault={handleSubmit}>
         <div class="form-group">
             <label for="title">Titre *</label>
-            <input 
-                type="text" 
-                id="title" 
-                bind:value={form.title} 
-                required 
+            <input
+                type="text"
+                id="title"
+                bind:value={form.title}
+                required
                 disabled={loading}
             />
         </div>
@@ -78,7 +129,11 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="category">Catégorie</label>
-                <select id="category" bind:value={form.category_id} disabled={loading}>
+                <select
+                    id="category"
+                    bind:value={form.category_id}
+                    disabled={loading}
+                >
                     <option value="">Sélectionner...</option>
                     {#each categories as cat}
                         <option value={cat.id}>{cat.name}</option>
@@ -88,7 +143,11 @@
 
             <div class="form-group">
                 <label for="media">Film/Série</label>
-                <select id="media" bind:value={form.media_id} disabled={loading}>
+                <select
+                    id="media"
+                    bind:value={form.media_id}
+                    disabled={loading}
+                >
                     <option value="">Sélectionner...</option>
                     {#each media as m}
                         <option value={m.id}>{m.title}</option>
@@ -99,10 +158,10 @@
 
         <div class="form-group">
             <label for="image_url">URL de l'image</label>
-            <input 
-                type="url" 
-                id="image_url" 
-                bind:value={form.image_url} 
+            <input
+                type="url"
+                id="image_url"
+                bind:value={form.image_url}
                 placeholder="https://..."
                 disabled={loading}
             />
@@ -110,9 +169,9 @@
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea 
-                id="description" 
-                bind:value={form.description} 
+            <textarea
+                id="description"
+                bind:value={form.description}
                 rows="3"
                 disabled={loading}
             ></textarea>
@@ -120,9 +179,9 @@
 
         <div class="form-group">
             <label for="ingredients">Ingrédients *</label>
-            <textarea 
-                id="ingredients" 
-                bind:value={form.ingredients} 
+            <textarea
+                id="ingredients"
+                bind:value={form.ingredients}
                 rows="6"
                 required
                 placeholder="- 200g de farine&#10;- 3 oeufs&#10;..."
@@ -132,9 +191,9 @@
 
         <div class="form-group">
             <label for="instructions">Instructions *</label>
-            <textarea 
-                id="instructions" 
-                bind:value={form.instructions} 
+            <textarea
+                id="instructions"
+                bind:value={form.instructions}
                 rows="8"
                 required
                 placeholder="1. Préchauffer le four...&#10;2. Mélanger..."
@@ -143,11 +202,15 @@
         </div>
 
         <div class="form-actions">
-            <button type="button" class="cancel" on:click={() => push('/recipes')}>
+            <button
+                type="button"
+                class="cancel"
+                on:click={() => push("/recipes")}
+            >
                 Annuler
             </button>
             <button type="submit" disabled={loading}>
-                {loading ? 'Création...' : 'Créer la recette'}
+                {loading ? "Création..." : "Créer la recette"}
             </button>
         </div>
     </form>
@@ -190,7 +253,9 @@
         margin-bottom: 0.5rem;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
         width: 100%;
         padding: 0.75rem 1rem;
         border: 1px solid #333;
@@ -201,7 +266,9 @@
         font-family: inherit;
     }
 
-    input:focus, select:focus, textarea:focus {
+    input:focus,
+    select:focus,
+    textarea:focus {
         outline: none;
         border-color: #e94560;
     }

@@ -17,7 +17,11 @@
             <li><a href="/recipes" use:link>Recettes</a></li>
             {#if $auth.user}
                 <li><a href="/favorites" use:link>Favoris</a></li>
-                <li><a href="/recipes/new" use:link>Créer</a></li>
+                <li>
+                    <a href="/movie-search" use:link class="create-link"
+                        >+ Créer</a
+                    >
+                </li>
                 <li><a href="/profile/{$auth.user.id}" use:link>Profil</a></li>
                 {#if $auth.user.role === "admin"}
                     <li><a href="/admin" use:link>Admin</a></li>

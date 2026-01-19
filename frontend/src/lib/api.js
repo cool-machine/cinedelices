@@ -52,6 +52,7 @@ export const api = {
     // Metadata
     getCategories: () => request('/categories'),
     getMedia: () => request('/media'),
+    createMedia: (data) => request('/media', { method: 'POST', body: JSON.stringify(data) }),
 
     // Admin
     admin: {
