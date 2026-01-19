@@ -1,96 +1,114 @@
 <script>
-    import { link } from 'svelte-spa-router';
-    import { auth } from '../lib/stores/auth.js';
+    import { link } from "svelte-spa-router";
+    import { auth } from "../lib/stores/auth.js";
 
     async function handleLogout() {
         await auth.logout();
     }
 </script>
 
-<nav class="navbar">
-    <div class="navbar-brand">
-        <a href="/" use:link class="logo">🎬 CinéDélices</a>
-    </div>
-    
-    <div class="navbar-menu">
-        <a href="/" use:link>Accueil</a>
-        <a href="/recipes" use:link>Recettes</a>
-        
-        {#if $auth.user}
-            <a href="/recipes/new" use:link>Nouvelle recette</a>
-            <a href="/favorites" use:link>Favoris</a>
-            {#if $auth.user.role === 'admin'}
-                <a href="/admin" use:link class="admin-link">Admin</a>
+<header>
+    <nav>
+        <div class="logo">
+            <a href="/" use:link>🎬 Ciné Délices</a>
+        </div>
+        <ul>
+            <li><a href="/" use:link>Accueil</a></li>
+            <li><a href="/recipes" use:link>Recettes</a></li>
+            {#if $auth.user}
+                <li><a href="/favorites" use:link>Favoris</a></li>
+                <li><a href="/recipes/new" use:link>Créer</a></li>
+                <li><a href="/profile/{$auth.user.id}" use:link>Profil</a></li>
+                {#if $auth.user.role === "admin"}
+                    <li><a href="/admin" use:link>Admin</a></li>
+                {/if}
+                <li>
+                    <button
+                        class="btn btn-small btn-secondary"
+                        on:click={handleLogout}>Déconnexion</button
+                    >
+                </li>
+            {:else}
+                <li>
+                    <a href="/login" use:link class="btn btn-small btn-gold"
+                        >Connexion</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/register"
+                        use:link
+                        class="btn btn-small btn-secondary">Inscription</a
+                    >
+                </li>
             {/if}
-            <div class="user-menu">
-                <a href="/profile/{$auth.user.id}" use:link>{$auth.user.username}</a>
-                <button on:click={handleLogout}>Déconnexion</button>
-            </div>
-        {:else}
-            <a href="/login" use:link>Connexion</a>
-            <a href="/register" use:link>Inscription</a>
-        {/if}
-    </div>
-</nav>
+        </ul>
+    </nav>
+</header>
 
 <style>
-    .navbar {
+    header {
+        background-color: var(--noir-pur);
+        padding: 1rem 5%;
+        border-bottom: 2px solid var(--or-cinema);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 2rem;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #e94560;
+    .logo a {
+        font-family: var(--font-title);
+        font-size: 2rem;
+        color: var(--or-cinema);
         text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
-    .navbar-menu {
+    nav ul {
         display: flex;
+        list-style: none;
+        align-items: center;
         gap: 1.5rem;
-        align-items: center;
+        margin: 0;
+        padding: 0;
     }
 
-    .navbar-menu a {
-        color: #eee;
+    nav a {
+        color: var(--blanc-casse);
         text-decoration: none;
-        transition: color 0.2s;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        transition: var(--transition);
     }
 
-    .navbar-menu a:hover {
-        color: #e94560;
-    }
-
-    .admin-link {
-        background: #e94560;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        color: white !important;
-    }
-
-    .user-menu {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
+    nav a:hover {
+        color: var(--or-cinema);
     }
 
     button {
-        background: transparent;
-        border: 1px solid #e94560;
-        color: #e94560;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
         cursor: pointer;
-        transition: all 0.2s;
     }
 
-    button:hover {
-        background: #e94560;
-        color: white;
+    @media (max-width: 768px) {
+        nav {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        nav ul {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
     }
 </style>

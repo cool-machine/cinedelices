@@ -1,36 +1,122 @@
 <script>
-    import { onMount } from 'svelte';
-    import { link } from 'svelte-spa-router';
-    import { api } from '../lib/api.js';
+    import { onMount } from "svelte";
+    import { link } from "svelte-spa-router";
+    import { api } from "../lib/api.js";
 
     let recipes = [];
     let categories = [];
     let media = [];
     let loading = true;
     let error = null;
-    
-    let selectedCategory = '';
-    let selectedMedia = '';
-    let searchQuery = '';
+
+    let selectedCategory = "";
+    let selectedMedia = "";
+    let searchQuery = "";
 
     onMount(async () => {
         try {
-            [recipes, categories, media] = await Promise.all([
-                api.getRecipes(),
-                api.getCategories(),
-                api.getMedia()
-            ]);
+            const [fetchedRecipes, fetchedCategories, fetchedMedia] =
+                await Promise.all([
+                    api.getRecipes(),
+                    api.getCategories(),
+                    api.getMedia(),
+                ]);
+
+            // Mock Data for Testing
+            const mockRecipes = [
+                {
+                    id: "mock-1",
+                    title: "Ratatouille de Rémy",
+                    image_url:
+                        "https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?w=800",
+                    author: { username: "Rémy" },
+                    media: { title: "Ratatouille" },
+                    category: { name: "Plat Principal" },
+                },
+                {
+                    id: "mock-2",
+                    title: "Los Pollos Hermanos Chicken",
+                    image_url:
+                        "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800",
+                    author: { username: "Gus Fring" },
+                    media: { title: "Breaking Bad" },
+                    category: { name: "Fast Food" },
+                },
+                {
+                    id: "mock-3",
+                    title: "Lembas Bread",
+                    image_url:
+                        "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=800",
+                    author: { username: "Legolas" },
+                    media: { title: "Lord of the Rings" },
+                    category: { name: "Dessert" },
+                },
+                {
+                    id: "mock-4",
+                    title: "Butterbeer",
+                    image_url:
+                        "https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800",
+                    author: { username: "Harry" },
+                    media: { title: "Harry Potter" },
+                    category: { name: "Boissons" },
+                },
+            ];
+
+            recipes = [...fetchedRecipes, ...mockRecipes];
+            categories = fetchedCategories;
+            media = fetchedMedia;
         } catch (e) {
             error = e.message;
+            // Fallback to mock data if API fails
+            recipes = [
+                {
+                    id: "mock-1",
+                    title: "Ratatouille de Rémy",
+                    image_url:
+                        "https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?w=800",
+                    author: { username: "Rémy" },
+                    media: { title: "Ratatouille" },
+                    category: { name: "Plat Principal" },
+                },
+                {
+                    id: "mock-2",
+                    title: "Los Pollos Hermanos Chicken",
+                    image_url:
+                        "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800",
+                    author: { username: "Gus Fring" },
+                    media: { title: "Breaking Bad" },
+                    category: { name: "Fast Food" },
+                },
+                {
+                    id: "mock-3",
+                    title: "Lembas Bread",
+                    image_url:
+                        "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=800",
+                    author: { username: "Legolas" },
+                    media: { title: "Lord of the Rings" },
+                    category: { name: "Dessert" },
+                },
+                {
+                    id: "mock-4",
+                    title: "Butterbeer",
+                    image_url:
+                        "https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800",
+                    author: { username: "Harry" },
+                    media: { title: "Harry Potter" },
+                    category: { name: "Boissons" },
+                },
+            ];
         } finally {
             loading = false;
         }
     });
 
-    $: filteredRecipes = recipes.filter(recipe => {
-        const matchesCategory = !selectedCategory || recipe.category_id == selectedCategory;
+    $: filteredRecipes = recipes.filter((recipe) => {
+        const matchesCategory =
+            !selectedCategory || recipe.category_id == selectedCategory;
         const matchesMedia = !selectedMedia || recipe.media_id == selectedMedia;
-        const matchesSearch = !searchQuery || 
+        const matchesSearch =
+            !searchQuery ||
             recipe.title.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesMedia && matchesSearch;
     });
@@ -40,12 +126,12 @@
     <h1>🍽️ Toutes les recettes</h1>
 
     <div class="filters">
-        <input 
-            type="text" 
-            placeholder="Rechercher..." 
+        <input
+            type="text"
+            placeholder="Rechercher..."
             bind:value={searchQuery}
         />
-        
+
         <select bind:value={selectedCategory}>
             <option value="">Toutes les catégories</option>
             {#each categories as cat}
@@ -85,10 +171,14 @@
                         {/if}
                         <div class="tags">
                             {#if recipe.media}
-                                <span class="media-tag">{recipe.media.title}</span>
+                                <span class="media-tag"
+                                    >{recipe.media.title}</span
+                                >
                             {/if}
                             {#if recipe.category}
-                                <span class="category-tag">{recipe.category.name}</span>
+                                <span class="category-tag"
+                                    >{recipe.category.name}</span
+                                >
                             {/if}
                         </div>
                     </div>
@@ -118,7 +208,8 @@
         flex-wrap: wrap;
     }
 
-    .filters input, .filters select {
+    .filters input,
+    .filters select {
         padding: 0.75rem 1rem;
         border: 1px solid #333;
         border-radius: 8px;
@@ -143,12 +234,14 @@
         border-radius: 12px;
         overflow: hidden;
         text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
     }
 
     .recipe-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     }
 
     .recipe-image {
@@ -193,7 +286,8 @@
         flex-wrap: wrap;
     }
 
-    .media-tag, .category-tag {
+    .media-tag,
+    .category-tag {
         padding: 0.25rem 0.5rem;
         border-radius: 4px;
         font-size: 0.75rem;
@@ -209,7 +303,9 @@
         color: #ccc;
     }
 
-    .loading, .error, .empty {
+    .loading,
+    .error,
+    .empty {
         text-align: center;
         padding: 3rem;
         color: #888;
