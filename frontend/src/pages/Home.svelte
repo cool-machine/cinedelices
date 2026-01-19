@@ -1,7 +1,7 @@
 <script>
-    import { onMount } from 'svelte';
-    import { link } from 'svelte-spa-router';
-    import { api } from '../lib/api.js';
+    import { onMount } from "svelte";
+    import { link } from "svelte-spa-router";
+    import { api } from "../lib/api.js";
 
     let recipes = [];
     let loading = true;
@@ -21,14 +21,43 @@
 
 <div class="home">
     <section class="hero">
-        <h1>🎬 CinéDélices</h1>
-        <p>Découvrez les recettes inspirées de vos films et séries préférés</p>
-        <a href="/recipes" use:link class="cta-button">Explorer les recettes</a>
+        <div class="hero-content">
+            <h1>🎬 CinéDélices</h1>
+            <p>
+                Découvrez les recettes inspirées de vos films et séries préférés
+            </p>
+            <a href="/recipes" use:link class="cta-button"
+                >Explorer les recettes</a
+            >
+        </div>
+        <div class="hero-images">
+            <div class="hero-image-card">
+                <img
+                    src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&h=200&fit=crop"
+                    alt="Cinéma"
+                />
+                <span>🎥 Films cultes</span>
+            </div>
+            <div class="hero-image-card">
+                <img
+                    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&h=200&fit=crop"
+                    alt="Cuisine"
+                />
+                <span>🍽️ Recettes gourmandes</span>
+            </div>
+            <div class="hero-image-card">
+                <img
+                    src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=200&fit=crop"
+                    alt="Pizza"
+                />
+                <span>🎬 Inspirations séries</span>
+            </div>
+        </div>
     </section>
 
     <section class="featured">
         <h2>Recettes à la une</h2>
-        
+
         {#if loading}
             <p class="loading">Chargement...</p>
         {:else if error}
@@ -41,7 +70,10 @@
                     <a href="/recipes/{recipe.id}" use:link class="recipe-card">
                         <div class="recipe-image">
                             {#if recipe.image_url}
-                                <img src={recipe.image_url} alt={recipe.title} />
+                                <img
+                                    src={recipe.image_url}
+                                    alt={recipe.title}
+                                />
                             {:else}
                                 <div class="placeholder">🍽️</div>
                             {/if}
@@ -49,10 +81,14 @@
                         <div class="recipe-info">
                             <h3>{recipe.title}</h3>
                             {#if recipe.media}
-                                <span class="media-tag">{recipe.media.title}</span>
+                                <span class="media-tag"
+                                    >{recipe.media.title}</span
+                                >
                             {/if}
                             {#if recipe.category}
-                                <span class="category-tag">{recipe.category.name}</span>
+                                <span class="category-tag"
+                                    >{recipe.category.name}</span
+                                >
                             {/if}
                         </div>
                     </a>
@@ -70,16 +106,68 @@
     }
 
     .hero {
-        text-align: center;
-        padding: 4rem 2rem;
+        padding: 3rem 2rem;
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         border-radius: 12px;
         margin-bottom: 3rem;
     }
 
+    .hero-content {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .hero-images {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .hero-image-card {
+        position: relative;
+        width: 180px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition:
+            transform 0.3s,
+            box-shadow 0.3s;
+    }
+
+    .hero-image-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+    }
+
+    .hero-image-card img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+    }
+
+    .hero-image-card span {
+        display: block;
+        padding: 0.5rem;
+        background: rgba(26, 26, 46, 0.95);
+        color: #d4af37;
+        font-size: 0.85rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
     .hero h1 {
         font-size: 3rem;
-        color: #e94560;
+        background: linear-gradient(
+            135deg,
+            #d4af37 0%,
+            #f4d03f 50%,
+            #d4af37 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
         margin-bottom: 1rem;
     }
 
@@ -91,18 +179,20 @@
 
     .cta-button {
         display: inline-block;
-        background: #e94560;
-        color: white;
+        background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
+        color: #1a1a2e;
         padding: 1rem 2rem;
         border-radius: 8px;
         text-decoration: none;
         font-weight: bold;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
     }
 
     .cta-button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
     }
 
     .featured h2 {
@@ -122,12 +212,14 @@
         border-radius: 12px;
         overflow: hidden;
         text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
     }
 
     .recipe-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     }
 
     .recipe-image {
@@ -160,7 +252,8 @@
         margin-bottom: 0.5rem;
     }
 
-    .media-tag, .category-tag {
+    .media-tag,
+    .category-tag {
         display: inline-block;
         padding: 0.25rem 0.5rem;
         border-radius: 4px;
@@ -178,7 +271,8 @@
         color: #ccc;
     }
 
-    .loading, .error {
+    .loading,
+    .error {
         text-align: center;
         padding: 2rem;
         color: #ccc;

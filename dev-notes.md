@@ -456,7 +456,7 @@ npm install @google/generative-ai
 | # | Tâche | Action | Description |
 |---|-------|--------|-------------|
 | 3.35 | Créer workflow GitHub Actions | `.github/workflows/ci.yml` | Tests automatiques sur PR | ✅ |
-| 3.36 | Créer workflow deploy | `.github/workflows/deploy.yml` | Build + deploy sur merge main | 🔄 |
+| 3.36 | Créer workflow deploy | `.github/workflows/deploy.yml` | Build + deploy sur merge main | ✅ |
 | 3.37 | Créer compte Azure | portal.azure.com | Crédits étudiants | 🔄 |
 | 3.38 | Créer Resource Group | Azure Portal | `rg-cinedelices` | 🔄 |
 | 3.39 | Créer Azure App Service | Azure Portal | Plan gratuit F1 (staging) | 🔄 |
@@ -468,7 +468,7 @@ npm install @google/generative-ai
 | 3.45 | Tester l'application déployée | URL Azure | Test complet | 🔄 |
 | 3.46 | Configurer domaine custom | Azure DNS (optionnel) | Nom de domaine | 🔄 |
 | 3.47 | Activer HTTPS | App Service → TLS/SSL | Certificat gratuit Azure | 🔄 |
-| 3.48 | Commit CI/CD | `git commit -m "ci: add GitHub Actions deployment workflow"` | | 🔄 |
+| 3.48 | Commit CI/CD | `git commit -m "ci: add GitHub Actions deployment workflow"` | | ✅ |
 | 3.49 | Merge final vers main | PR review + merge | Déploiement production | 🔄 |
 | 3.50 | **LIVRABLE SPRINT 3** | Application déployée en production | ✅ Site accessible en ligne |
 

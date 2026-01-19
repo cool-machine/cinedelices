@@ -22,47 +22,7 @@
                     api.getMedia(),
                 ]);
 
-            // Mock Data for Testing
-            const mockRecipes = [
-                {
-                    id: "mock-1",
-                    title: "Ratatouille de Rémy",
-                    image_url:
-                        "https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?w=800",
-                    author: { username: "Rémy" },
-                    media: { title: "Ratatouille" },
-                    category: { name: "Plat Principal" },
-                },
-                {
-                    id: "mock-2",
-                    title: "Los Pollos Hermanos Chicken",
-                    image_url:
-                        "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800",
-                    author: { username: "Gus Fring" },
-                    media: { title: "Breaking Bad" },
-                    category: { name: "Fast Food" },
-                },
-                {
-                    id: "mock-3",
-                    title: "Lembas Bread",
-                    image_url:
-                        "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=800",
-                    author: { username: "Legolas" },
-                    media: { title: "Lord of the Rings" },
-                    category: { name: "Dessert" },
-                },
-                {
-                    id: "mock-4",
-                    title: "Butterbeer",
-                    image_url:
-                        "https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=800",
-                    author: { username: "Harry" },
-                    media: { title: "Harry Potter" },
-                    category: { name: "Boissons" },
-                },
-            ];
-
-            recipes = [...fetchedRecipes, ...mockRecipes];
+            recipes = fetchedRecipes;
             categories = fetchedCategories;
             media = fetchedMedia;
         } catch (e) {

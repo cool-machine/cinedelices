@@ -1,6 +1,6 @@
 <script>
-    import { onMount, createEventDispatcher } from "svelte";
-    import { fade, fly } from "svelte/transition";
+    import { onMount } from "svelte";
+    import { fly } from "svelte/transition";
 
     let visible = false;
 
@@ -12,8 +12,14 @@
     });
 
     function acceptCookies() {
-        localStorage.setItem("cinedelices_cookie_consent", "true");
+        localStorage.setItem("cinedelices_cookie_consent", "accepted");
         visible = false;
+    }
+
+    function refuseCookies() {
+        localStorage.setItem("cinedelices_cookie_consent", "refused");
+        visible = false;
+        // Note: Functional cookies (session auth) still work - they're required for the site
     }
 </script>
 
@@ -22,14 +28,21 @@
         <div class="cookie-content">
             <p>
                 🍪 <strong>Respect de votre vie privée</strong> <br />
-                Nous utilisons des cookies essentiels pour assurer le bon fonctionnement
-                de votre session sur Ciné Délices. Aucune donnée n'est revendue à
-                des tiers.
+                Nous utilisons uniquement des
+                <strong>cookies fonctionnels</strong>
+                nécessaires au bon fonctionnement du site (authentification, session).
+                Aucun cookie publicitaire ni de suivi n'est utilisé. Aucune donnée
+                n'est revendue à des tiers.
                 <a href="/#/privacy" class="link">En savoir plus</a>.
             </p>
-            <button class="accept-btn" on:click={acceptCookies}>
-                Accepter et Fermer
-            </button>
+            <div class="button-group">
+                <button class="refuse-btn" on:click={refuseCookies}>
+                    Refuser
+                </button>
+                <button class="accept-btn" on:click={acceptCookies}>
+                    Accepter
+                </button>
+            </div>
         </div>
     </div>
 {/if}
@@ -76,13 +89,35 @@
         text-decoration: underline;
     }
 
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .refuse-btn {
+        background-color: transparent;
+        color: #ccc;
+        border: 1px solid #666;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .refuse-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: #999;
+    }
+
     .accept-btn {
         background-color: var(--or-cinema);
         color: var(--noir-pellicule);
         border: none;
         padding: 0.8rem 1.5rem;
-        font-family: var(--font-title);
-        font-size: 1.1rem;
+        font-size: 1rem;
         cursor: pointer;
         border-radius: 4px;
         transition: all 0.3s ease;

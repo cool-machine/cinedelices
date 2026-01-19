@@ -81,7 +81,7 @@ app.get('/health', (req, res) => {
 
 // 404 Handler for API
 // API 404
-app.use('/api/*', (req, res) => {
+app.all('/api/*path', (req, res) => {
     res.status(404).json({ message: 'Not found' });
 });
 
@@ -91,7 +91,7 @@ if (process.env.NODE_ENV === 'production') {
     // Assuming the build output is moved to backend/public during deployment
     app.use(express.static(path.join(__dirname, 'public')));
 
-    app.get('*', (req, res) => {
+    app.get('/*path', (req, res) => {
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
 } else {

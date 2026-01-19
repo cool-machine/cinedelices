@@ -1,33 +1,33 @@
 <script>
-    import { onMount } from 'svelte';
-    import { push } from 'svelte-spa-router';
-    import { api } from '../lib/api.js';
-    import { auth } from '../lib/stores/auth.js';
+    import { onMount } from "svelte";
+    import { push } from "svelte-spa-router";
+    import { api } from "../lib/api.js";
+    import { auth } from "../lib/stores/auth.js";
 
     let loading = true;
     let saving = false;
     let error = null;
 
     let form = {
-        username: '',
-        email: '',
-        bio: '',
-        avatar_url: ''
+        username: "",
+        email: "",
+        bio: "",
+        avatar_url: "",
     };
 
     onMount(async () => {
         if (!$auth.user) {
-            push('/login');
+            push("/login");
             return;
         }
 
         try {
             const user = await api.getMe();
             form = {
-                username: user.username || '',
-                email: user.email || '',
-                bio: user.bio || '',
-                avatar_url: user.avatar_url || ''
+                username: user.username || "",
+                email: user.email || "",
+                bio: user.bio || "",
+                avatar_url: user.avatar_url || "",
             };
         } catch (e) {
             error = e.message;
@@ -52,13 +52,19 @@
     }
 
     async function handleDeleteAccount() {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) {
+        if (
+            !confirm(
+                "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+            )
+        ) {
             return;
         }
 
-        const confirmName = prompt(`Pour confirmer, tapez "${$auth.user.username}" :`);
+        const confirmName = prompt(
+            `Pour confirmer, tapez "${$auth.user.username}" :`,
+        );
         if (confirmName !== $auth.user.username) {
-            alert('Nom d\'utilisateur incorrect. Suppression annulée.');
+            alert("Nom d'utilisateur incorrect. Suppression annulée.");
             return;
         }
 
@@ -66,7 +72,7 @@
             loading = true;
             await api.deleteUser($auth.user.id);
             await auth.logout();
-            push('/');
+            push("/");
         } catch (e) {
             error = e.message;
             loading = false;
@@ -87,11 +93,11 @@
         <form on:submit|preventDefault={handleSubmit}>
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
-                <input 
-                    type="text" 
-                    id="username" 
-                    bind:value={form.username} 
-                    required 
+                <input
+                    type="text"
+                    id="username"
+                    bind:value={form.username}
+                    required
                     minlength="3"
                     disabled={saving}
                 />
@@ -99,21 +105,21 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    bind:value={form.email} 
-                    required 
+                <input
+                    type="email"
+                    id="email"
+                    bind:value={form.email}
+                    required
                     disabled={saving}
                 />
             </div>
 
             <div class="form-group">
                 <label for="avatar_url">URL de l'avatar</label>
-                <input 
-                    type="url" 
-                    id="avatar_url" 
-                    bind:value={form.avatar_url} 
+                <input
+                    type="url"
+                    id="avatar_url"
+                    bind:value={form.avatar_url}
                     placeholder="https://..."
                     disabled={saving}
                 />
@@ -126,9 +132,9 @@
 
             <div class="form-group">
                 <label for="bio">Bio</label>
-                <textarea 
-                    id="bio" 
-                    bind:value={form.bio} 
+                <textarea
+                    id="bio"
+                    bind:value={form.bio}
                     rows="4"
                     placeholder="Parlez-nous de vous..."
                     disabled={saving}
@@ -136,20 +142,31 @@
             </div>
 
             <div class="form-actions">
-                <button type="button" class="cancel" on:click={() => push(`/profile/${$auth.user.id}`)}>
+                <button
+                    type="button"
+                    class="cancel"
+                    on:click={() => push(`/profile/${$auth.user.id}`)}
+                >
                     Annuler
                 </button>
                 <button type="submit" disabled={saving}>
-                    {saving ? 'Enregistrement...' : 'Enregistrer'}
+                    {saving ? "Enregistrement..." : "Enregistrer"}
                 </button>
             </div>
-        </form>
         </form>
 
         <div class="delete-account-section">
             <h3>Zone Danger</h3>
-            <p>La suppression de votre compte est irréversible. Toutes vos données (recettes, favoris, commentaires) seront définitivement effacées.</p>
-            <button type="button" class="delete-btn" on:click={handleDeleteAccount}>
+            <p>
+                La suppression de votre compte est irréversible. Toutes vos
+                données (recettes, favoris, commentaires) seront définitivement
+                effacées.
+            </p>
+            <button
+                type="button"
+                class="delete-btn"
+                on:click={handleDeleteAccount}
+            >
                 Supprimer mon compte
             </button>
         </div>
@@ -193,7 +210,8 @@
         margin-bottom: 0.5rem;
     }
 
-    input, textarea {
+    input,
+    textarea {
         width: 100%;
         padding: 0.75rem 1rem;
         border: 1px solid #333;
@@ -204,7 +222,8 @@
         font-family: inherit;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
         outline: none;
         border-color: #e94560;
     }
