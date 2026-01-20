@@ -30,6 +30,14 @@ export const register = async (req, res) => {
         // Generate token
         const token = generateToken(user);
 
+        // Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
+
         // Remove password from response
         const userResponse = user.toJSON();
         delete userResponse.password_hash;
@@ -61,6 +69,14 @@ export const login = async (req, res) => {
 
         // Generate token
         const token = generateToken(user);
+
+        // Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
 
         // Remove password from response
         const userResponse = user.toJSON();

@@ -8,7 +8,7 @@ export const createRecipeSchema = [
     body('difficulty').optional().isIn(['facile', 'moyen', 'difficile']),
     body('prep_time').optional().isInt({ min: 0 }),
     body('cook_time').optional().isInt({ min: 0 }),
-    body('image_url').optional().isURL().withMessage('Invalid URL format')
+    body('image_url').optional({ values: 'falsy' }).isURL().withMessage('Invalid URL format')
 ];
 
 export const updateRecipeSchema = [
@@ -18,5 +18,5 @@ export const updateRecipeSchema = [
     body('difficulty').optional().isIn(['facile', 'moyen', 'difficile']),
     body('prep_time').optional().isInt({ min: 0 }),
     body('cook_time').optional().isInt({ min: 0 }),
-    body('image_url').optional().isURL().withMessage('Invalid URL format')
+    body('image_url').optional({ values: 'falsy' }).isURL().withMessage('Invalid URL format')
 ];

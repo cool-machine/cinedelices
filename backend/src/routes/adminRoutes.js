@@ -4,7 +4,7 @@ import { validate } from '../middlewares/validator.js';
 import { body } from 'express-validator';
 import db from '../models/index.js';
 
-const { Recipe, Category, Media, User } = db;
+const { Recipe, Category, Media, User, Rating, Review, Favorite } = db;
 
 const router = Router();
 
@@ -46,6 +46,12 @@ router.delete('/recipes/:id', async (req, res) => {
         if (!recipe) {
             return res.status(404).json({ message: 'Recipe not found' });
         }
+
+        // Delete related records first to avoid foreign key constraints
+        await Rating.destroy({ where: { recipe_id: req.params.id } });
+        await Review.destroy({ where: { recipe_id: req.params.id } });
+        await Favorite.destroy({ where: { recipe_id: req.params.id } });
+
         await recipe.destroy();
         res.status(204).send();
     } catch (error) {
@@ -166,7 +172,7 @@ router.put('/users/:id', async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        
+
         const { username, email, role, bio, avatar_url } = req.body;
         const updateData = {};
         if (username) updateData.username = username;
@@ -174,12 +180,12 @@ router.put('/users/:id', async (req, res) => {
         if (role) updateData.role = role;
         if (bio !== undefined) updateData.bio = bio;
         if (avatar_url !== undefined) updateData.avatar_url = avatar_url;
-        
+
         await user.update(updateData);
-        
+
         const userResponse = user.toJSON();
         delete userResponse.password_hash;
-        
+
         res.status(200).json(userResponse);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -208,7 +214,7 @@ router.get('/stats', async (req, res) => {
             Category.count(),
             Media.count()
         ]);
-        
+
         res.status(200).json({
             recipes: recipesCount,
             users: usersCount,
