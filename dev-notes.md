@@ -386,6 +386,55 @@ npm install @google/generative-ai
 
 ---
 
+### 🎨 Sprint 3.0 : Visual Refinement (Match Mockups)
+
+**Objectif** : Aligner les visuels du frontend avec les maquettes haute-fidélité créées en Sprint 0.
+
+#### Phase 1 : Design Foundation
+
+| # | Tâche | Description | Statut |
+|---|-------|-------------|--------|
+| 3.0.1 | Importer les fonts Google | Bebas Neue, Montserrat, Playfair Display | [ ] |
+| 3.0.2 | Mettre à jour les variables CSS | Couleurs (#D4AF37, #8B0000, #1A1A1A) et typographie | [ ] |
+
+#### Phase 2 : Navbar
+
+| # | Tâche | Description | Statut |
+|---|-------|-------------|--------|
+| 3.0.3 | Ajouter logo film projector | Style cinéma authentique | [ ] |
+| 3.0.4 | Appliquer typographie Bebas Neue | Titres et navigation | [ ] |
+
+#### Phase 3 : Homepage
+
+| # | Tâche | Description | Statut |
+|---|-------|-------------|--------|
+| 3.0.5 | Refondre le hero section | Film strip frame + featured dish | [ ] |
+| 3.0.6 | Ajouter section "NOW PLAYING" | Header théâtral + film strip borders | [ ] |
+| 3.0.7 | Ajouter section "COMING SOON" | Cards preview avec bordures cinéma | [ ] |
+
+#### Phase 4 : Recipe Detail Page
+
+| # | Tâche | Description | Statut |
+|---|-------|-------------|--------|
+| 3.0.8 | Ajouter Meta Icons Row | Prep time, cook time, portions, difficulty icons | [ ] |
+| 3.0.9 | Créer TMDB Sidebar | Movie poster, release year, director, rating | [ ] |
+| 3.0.10 | Numéroter les instructions | Grid layout avec cercles dorés | [ ] |
+
+#### Phase 5 : Footer
+
+| # | Tâche | Description | Statut |
+|---|-------|-------------|--------|
+| 3.0.11 | Créer footer complet | Links, social icons, newsletter | [ ] |
+
+#### Phase 6 : Verification
+
+| # | Tâche | Description | Statut |
+|---|-------|-------------|--------|
+| 3.0.12 | Tests visuels | Comparaison côte-à-côte avec mockups | [ ] |
+| 3.0.13 | Tests responsive | Mobile, tablet, desktop | [ ] |
+
+---
+
 ### 🎯 Sprint 3 : Finitions, Tests & Déploiement
 
 **Objectif** : Finaliser, tester, sécuriser et déployer l'application.
