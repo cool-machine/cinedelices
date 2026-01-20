@@ -17,16 +17,24 @@ git checkout develop
 ### 2. Copier les variables d'environnement
 
 ```bash
+# Dans le dossier backend
+cd backend
 cp .env.example .env
 ```
 
 **Important** : Éditer `.env` et remplacer :
 - `DB_PASSWORD` par votre mot de passe
-- `SESSION_SECRET` par une clé aléatoire (vous pouvez générer avec `openssl rand -base64 32`)
+- `SESSION_SECRET` par une clé aléatoire
+- `COOKIE_SECRET` par une clé aléatoire
 
 ### 3. Installer les dépendances
 
 ```bash
+# Backend (toujours dans le dossier backend)
+npm install
+
+# Frontend
+cd ../frontend
 npm install
 ```
 
@@ -37,7 +45,10 @@ npm install
 
 ### 5. Démarrer la base de données
 
+Depuis la racine du projet :
+
 ```bash
+cd ..
 docker-compose -f docker-compose.dev.yml up db -d
 ```
 
@@ -49,7 +60,10 @@ docker ps
 
 ### 6. Initialiser la base de données
 
+Depuis le dossier backend :
+
 ```bash
+cd backend
 # Exécuter les migrations
 npm run db:migrate
 
@@ -59,11 +73,21 @@ npm run db:seed
 
 ### 7. Démarrer le serveur
 
+Vous avez besoin de deux terminaux :
+
+Terminal 1 (Backend) :
 ```bash
+cd backend
 npm run dev
 ```
 
-Ouvrir dans votre navigateur : **http://localhost:3000**
+Terminal 2 (Frontend) :
+```bash
+cd frontend
+npm run dev
+```
+
+Ouvrir dans votre navigateur : **http://localhost:5173**
 
 ---
 
