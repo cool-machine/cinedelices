@@ -12,7 +12,7 @@
     let carouselOffset = 0;
     let isTransitioning = false;
     const CARD_WIDTH = 170; // 160px card + 10px gap
-    const VISIBLE_CARDS = 5;
+    const VISIBLE_CARDS = 8;
 
     // Create extended array for infinite loop (original + clone of first cards at end)
     $: extendedRecipes =
