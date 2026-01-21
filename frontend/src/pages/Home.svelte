@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
     import { link } from "svelte-spa-router";
     import { api } from "../lib/api.js";
 
@@ -36,7 +36,7 @@
         }
     });
 
-    function scrollCarousel(direction) {
+    async function scrollCarousel(direction) {
         if (isTransitioning || comingSoonRecipes.length === 0) return;
 
         const totalOriginal = comingSoonRecipes.length;
@@ -47,12 +47,14 @@
 
             // When we reach the cloned section, snap back to start after animation
             if (carouselOffset >= totalOriginal) {
-                setTimeout(() => {
+                setTimeout(async () => {
                     // Disable transition temporarily for instant snap
                     const track = document.querySelector(".carousel-track");
                     if (track) {
                         track.style.transition = "none";
                         carouselOffset = 0;
+                        await tick(); // Wait for Svelte to apply transform change
+
                         // Force reflow
                         void track.offsetWidth;
                         track.style.transition = "transform 0.4s ease";
@@ -69,8 +71,11 @@
                 if (track) {
                     track.style.transition = "none";
                     carouselOffset = totalOriginal;
+                    await tick(); // Wait for DOM update
                     void track.offsetWidth;
                     track.style.transition = "transform 0.4s ease";
+                    // Need small delay to ensure transition is active before decrement
+                    await new Promise((r) => requestAnimationFrame(r));
                 }
             }
             carouselOffset--;
